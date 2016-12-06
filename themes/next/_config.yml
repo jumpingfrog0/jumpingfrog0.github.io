@@ -99,7 +99,7 @@ avatar: /images/minion.jpeg
 links_title: Links
 # links
 links:
-  Objccn.io: http://objccn.io/
+  # Objccn.io: http://objccn.io/
 
 # TOC in the Sidebar
 toc:
