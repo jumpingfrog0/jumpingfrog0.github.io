@@ -1,0 +1,878 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jumpingfrog0, Swift, iOS" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="去年8月份的时候由于公司的需求，开发了一个只在司机间使用的企业内部的iOS应用，当时就打算写一篇文章来总结一下了，然而我是重度拖延症患者，一直拖着没完成。一年过去了，今天才想起来这回事，才开始动手写这篇文章。
+企业内部应用企业内部应用，即只在企业部门和员工内部使用、不对外公开的应用。苹果提供了专门的In-House证书用来发布这种应用，可以分发给任意的手机，只要通过一个URL即可下载安装，不用上传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 企业内部(In-House)应用分发">
+<meta property="og:url" content="http://jumpingfrog0.com/2016/2016-08-16-ios-enterprise-application-distribution/index.html">
+<meta property="og:site_name" content="jumpingfrog0">
+<meta property="og:description" content="去年8月份的时候由于公司的需求，开发了一个只在司机间使用的企业内部的iOS应用，当时就打算写一篇文章来总结一下了，然而我是重度拖延症患者，一直拖着没完成。一年过去了，今天才想起来这回事，才开始动手写这篇文章。
+企业内部应用企业内部应用，即只在企业部门和员工内部使用、不对外公开的应用。苹果提供了专门的In-House证书用来发布这种应用，可以分发给任意的手机，只要通过一个URL即可下载安装，不用上传">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/BF3C42FA-2DBD-4CD2-9B0F-F1A7FB8EBBF9.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/61A9C0ED-8A61-455F-803D-27F2F80BD358.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/F5FE4D91-A39D-43BE-9173-9583DC027F89.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/54CDD771-A9ED-4A79-AA73-C5DA1DE9B6A2.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/C2A751F9-A8B6-4888-877A-62DEB4F96A3D.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/515BAA10430C80AC9421639148B387E3.jpg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/ACEEDF6B084EAC46F70F6D1494CB5EDF.jpg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/iphone6-ios9-enterprise-untrusted_enterprise_app.png">
+<meta property="og:updated_time" content="2016-08-16T17:50:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 企业内部(In-House)应用分发">
+<meta name="twitter:description" content="去年8月份的时候由于公司的需求，开发了一个只在司机间使用的企业内部的iOS应用，当时就打算写一篇文章来总结一下了，然而我是重度拖延症患者，一直拖着没完成。一年过去了，今天才想起来这回事，才开始动手写这篇文章。
+企业内部应用企业内部应用，即只在企业部门和员工内部使用、不对外公开的应用。苹果提供了专门的In-House证书用来发布这种应用，可以分发给任意的手机，只要通过一个URL即可下载安装，不用上传">
+<meta name="twitter:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/BF3C42FA-2DBD-4CD2-9B0F-F1A7FB8EBBF9.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> iOS 企业内部(In-House)应用分发 | jumpingfrog0 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jumpingfrog0</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '_hsnBCSxyAH__Kvfd1uL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS 企业内部(In-House)应用分发
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-17T01:50:43+08:00" content="2016-08-17">
+              2016-08-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/2016-08-16-ios-enterprise-application-distribution/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/2016-08-16-ios-enterprise-application-distribution/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>去年8月份的时候由于公司的需求，开发了一个只在司机间使用的企业内部的iOS应用，当时就打算写一篇文章来总结一下了，然而我是重度拖延症患者，一直拖着没完成。一年过去了，今天才想起来这回事，才开始动手写这篇文章。</p>
+<h2 id="企业内部应用"><a href="#企业内部应用" class="headerlink" title="企业内部应用"></a>企业内部应用</h2><p>企业内部应用，即只在企业部门和员工内部使用、不对外公开的应用。苹果提供了专门的<code>In-House</code>证书用来发布这种应用，可以分发给任意的手机，只要通过一个URL即可下载安装，不用上传到<code>App Stroe</code>审核。我把企业内部应用也叫做<code>In-House</code>应用。</p>
+<p><code>In-House</code>应用，有时需要根据部门需求进行版本的快速迭代，因为不需要<code>App Store</code>审核，所以可以做到随时修改，随时发布，节省了大量的时间。<code>In-House</code>证书还可以用于应用的内测分发，现在大部分的内测分发平台如蒲公英，Fir.im等的公测功能就是使用<code>In-House</code>证书实现的。</p>
+<h4 id="必须具备的两个条件："><a href="#必须具备的两个条件：" class="headerlink" title="必须具备的两个条件："></a>必须具备的两个条件：</h4><ul>
+<li>企业开发者账号。99$的普通开发者账号不行，必须以企业的名义申请一个299$的企业开发者账号<code>Apple Developer Enterprise Program</code></li>
+<li>带SSL证书的域名。企业内部应用需要把ipa文件上传到服务器，然后通过一个链接来下载安装，而苹果很重视安全性，要求这个链接的域名必须具有SSL证书，支持 https ，否则无法安装。</li>
+</ul>
+<p>SSL证书其实并不是必需的，可以使用一些知名的云存储服务，比如亚马逊的AWS，阿里云等，这些大公司的云存储都支持Https，我用的就是AWS的S3云存储，但299$的企业开发者账号就避免不了。</p>
+<h4 id="准备的文件"><a href="#准备的文件" class="headerlink" title="准备的文件"></a>准备的文件</h4><ul>
+<li><code>ipa</code>文件。</li>
+<li><code>plist</code>文件。名称必须与<code>ipa</code>文件一致，用于配置bundle id、版本号、<code>ipa</code>文件的URL、应用图标等。</li>
+<li>@1x 和 @2x 的Icon。下载安装时显示应用图标。</li>
+</ul>
+<h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><ol>
+<li>创建发布证书(<strong>Production Certificates</strong>)，选择<code>In-House</code>类型的，过程我就不赘述了，和其他证书一样。<br><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/BF3C42FA-2DBD-4CD2-9B0F-F1A7FB8EBBF9.png" alt=""></li>
+<li>创建配置文件(<strong>Distribution Provisioning Profiles</strong>)<br><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/61A9C0ED-8A61-455F-803D-27F2F80BD358.png" alt=""><br><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/F5FE4D91-A39D-43BE-9173-9583DC027F89.png" alt=""></li>
+<li>在Xcode选择对应的Code Signing 和 Provisioning Profile, Archive<br><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/54CDD771-A9ED-4A79-AA73-C5DA1DE9B6A2.png" alt=""></li>
+<li>导出 ipa 文件</li>
+</ol>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/C2A751F9-A8B6-4888-877A-62DEB4F96A3D.png" alt=""></p>
+<h2 id="plist-文件"><a href="#plist-文件" class="headerlink" title="plist 文件"></a>plist 文件</h2><p>Xcode 5 及其以前打包<code>In-House</code>应用会一起生成<code>ipa</code>和<code>plist</code>文件，但Xcode 6 以后就只有<code>ipa</code>文件了，所以要手动生成 <code>plist</code>文件。<br>文件格式如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</div><div class="line"><span class="meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">key</span>&gt;</span>items<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">array</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>assets<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">array</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>kind<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>software-package<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>url<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT THE URL FOR YOUR IPA HERE. e.g : https://s3-us-west-2.amazonaws.com/folder/appName-version.ipa]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>kind<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>full-size-image<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>needs-shine<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">true</span>/&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>url<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT THE URL FOR INSTALLATION @2x ICON HERE. e.g : https://s3-us-west-2.amazonaws.com/folder/images/Icon@2x.png]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>kind<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>display-image<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>needs-shine<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">true</span>/&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">key</span>&gt;</span>url<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">					<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT THE URL FOR INSTALLATION ICON HERE. e.g : https://s3-us-west-2.amazonaws.com/folder/images/Icon.png]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">array</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">key</span>&gt;</span>metadata<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">dict</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>bundle-identifier<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT BUNDLE ID HERE]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>bundle-version<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT VERSION HERE]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>kind<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>software<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">key</span>&gt;</span>title<span class="tag">&lt;/<span class="name">key</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">string</span>&gt;</span>[INSERT APP TITLE HERE. The Title will present to the user installing the app]<span class="tag">&lt;/<span class="name">string</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">array</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dict</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>在<code>plist</code>文件中输入<code>ipa</code>的URL、安装时显示的 icon 的url、bundle id、版本号、安装前的提示信息。</p>
+<h2 id="发布与安装"><a href="#发布与安装" class="headerlink" title="发布与安装"></a>发布与安装</h2><h4 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h4><p>把<code>ipa</code>、配置好的<code>plist</code> 文件和图标一起上传AWS的S3云存储上即可。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>iOS的企业内部应用是通过访问<code>plist</code>文件来安装的，因为<code>plist</code>文件中包含了对应的<code>ipa</code>文件和图标的URL，iPhone会根据URL自动下载并安装应用程序。</p>
+<p>在iPhone的<code>Safari</code>浏览器中输入：</p>
+<pre><code>itms-services://?action=download-manifest&amp;url=https://s3-us-west-2.amazonaws.com/folder/appName-version.plist
+</code></pre><p>首先会询问是否打开要打开链接，点击“打开”</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/515BAA10430C80AC9421639148B387E3.jpg" alt=""></p>
+<p>然后询问是否要安装App，点击“安装”</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/ACEEDF6B084EAC46F70F6D1494CB5EDF.jpg" alt=""></p>
+<h2 id="自动更新"><a href="#自动更新" class="headerlink" title="自动更新"></a>自动更新</h2><p>为了避免每次发布后都需要通知别人更新App的麻烦事，自动更新是必备的。与后台沟通，设计一个更新接口<code>GET /updates</code></p>
+<h6 id="Query-Parameters"><a href="#Query-Parameters" class="headerlink" title="Query Parameters"></a>Query Parameters</h6><table>
+<thead>
+<tr>
+<th>name</th>
+<th>required</th>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>platform</td>
+<td>YES</td>
+<td>String</td>
+<td>平台，ios / android</td>
+</tr>
+<tr>
+<td>version</td>
+<td>YES</td>
+<td>String</td>
+<td>当前版本号，比如：1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h6 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h6><p>Status-Code: 200 OK</p>
+<pre><code>{
+      &quot;data&quot;: {
+          &quot;update&quot; : true,
+          &quot;lastest&quot; : &quot;1.0.1&quot;,
+          &quot;url&quot; : &quot;itms-services://?action=download-manifest&amp;url=https://s3-us-west-2.amazonaws.com/folder/appName-1.0.1.plist&quot;
+    },
+      &quot;error&quot;: {}
+}
+</code></pre><p>App一启动时，调用<code>GET /updates</code>接口传递平台参数和当前版本号给后台进行检查，后台判断当前版本是否为最新版，如果不是最新版，则返回最新版本号和对应的下载链接，然后用浏览器打开返回的URL进行安装即可。</p>
+<p>代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">upgrade</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">let</span> params = [</div><div class="line">        	<span class="string">"platform"</span> : <span class="string">"ios"</span>, </div><div class="line">        	<span class="string">"version"</span> : <span class="type">CKAppInfo</span>.releaseVersion()</div><div class="line">        ]</div><div class="line">        <span class="type">ObjectRequest</span>(<span class="type">URLRequest</span>: <span class="type">UpdateRouter</span>.<span class="type">CheckUpdate</span>(params)).load(</div><div class="line">            successHandler: &#123; (promotion: <span class="type">Promotion</span>?) -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">                <span class="type">SWLog</span>(promotion)</div><div class="line">                </div><div class="line">                <span class="keyword">if</span> promotion?.update == <span class="literal">true</span> &#123; <span class="comment">// different version</span></div><div class="line">                    </div><div class="line">                    <span class="keyword">let</span> alert = <span class="type">DVAlertController</span>(title: <span class="string">"Upgrade"</span>, message: <span class="string">"update to latest version"</span>, preferredStyle: <span class="type">UIAlertControllerStyle</span>.<span class="type">Alert</span>)</div><div class="line">                    alert.addAction(<span class="type">UIAlertAction</span>(title: <span class="string">"Upgrade"</span>, style: <span class="type">UIAlertActionStyle</span>.<span class="type">Default</span>, handler: &#123; (<span class="number">_</span>) -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">                        <span class="keyword">let</span> url = <span class="type">NSURL</span>(string:promotion!.url!)</div><div class="line">                        <span class="type">UIApplication</span>.sharedApplication().openURL(url!)</div><div class="line">                    &#125;))</div><div class="line">                    </div><div class="line">                    alert.show(animated: <span class="literal">true</span>, completion: <span class="literal">nil</span>)</div><div class="line">                    <span class="type">SWLog</span>(<span class="string">"different version"</span>)</div><div class="line">                &#125;</div><div class="line">            &#125;, failHandler: &#123; (error) -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">                <span class="keyword">self</span>.creatAlert(<span class="string">"checkout upgrade failed"</span>)</div><div class="line">        &#125;)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="不信任的企业开发者"><a href="#不信任的企业开发者" class="headerlink" title="不信任的企业开发者"></a>不信任的企业开发者</h2><p>如果你的手机是 iOS 9 系统，那么第一次打开企业级应用时，你并不能打开App，而是看到下面的信息：</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/iphone6-ios9-enterprise-untrusted_enterprise_app.png" alt=""></p>
+<p>苹果是一个极其重视安全性的公司，iOS 9 以后，安装的企业级应用在第一次打开之前必须要用户手动去信任这些App，参考<a href="https://support.apple.com/en-us/HT204460" target="_blank" rel="external">Guidelines for installing custom enterprise apps on iOS</a>。具体步骤如下：</p>
+<ul>
+<li>打开 <strong>设置</strong> –&gt; <strong>通用</strong> –&gt; <strong>描述文件与设备管理</strong></li>
+<li>在 <strong>企业级应用</strong> 分组下，点击 <strong>信任</strong> 开发者的证书</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/2016-03-26-establish-static-blog-with-hexo/" rel="next" title="使用Hexo搭建静态博客">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建静态博客
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/2016-08-17-git-go-back-1/" rel="prev" title="Git的反悔操作(一)">
+                Git的反悔操作(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/2016-08-16-ios-enterprise-application-distribution/"
+           data-title="iOS 企业内部(In-House)应用分发" data-url="http://jumpingfrog0.com/2016/2016-08-16-ios-enterprise-application-distribution/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/minion.jpeg"
+               alt="jumpingfrog0" />
+          <p class="site-author-name" itemprop="name">jumpingfrog0</p>
+          <p class="site-description motion-element" itemprop="description">Know a lot about a little, know a little about a lot</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jumpingfrog0" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3290250165/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-dong-hong" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/704851a93179/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#企业内部应用"><span class="nav-number">1.</span> <span class="nav-text">企业内部应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#必须具备的两个条件："><span class="nav-number">1.0.1.</span> <span class="nav-text">必须具备的两个条件：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#准备的文件"><span class="nav-number">1.0.2.</span> <span class="nav-text">准备的文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包"><span class="nav-number">2.</span> <span class="nav-text">打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plist-文件"><span class="nav-number">3.</span> <span class="nav-text">plist 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布与安装"><span class="nav-number">4.</span> <span class="nav-text">发布与安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#发布"><span class="nav-number">4.0.1.</span> <span class="nav-text">发布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">4.0.2.</span> <span class="nav-text">安装</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动更新"><span class="nav-number">5.</span> <span class="nav-text">自动更新</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Query-Parameters"><span class="nav-number">5.0.0.0.1.</span> <span class="nav-text">Query Parameters</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Response"><span class="nav-number">5.0.0.0.2.</span> <span class="nav-text">Response</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不信任的企业开发者"><span class="nav-number">6.</span> <span class="nav-text">不信任的企业开发者</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jumpingfrog0</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jumpingfrog0"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>

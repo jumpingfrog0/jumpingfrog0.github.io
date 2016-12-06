@@ -1,0 +1,859 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jumpingfrog0, Swift, iOS" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="自己一个人负责项目的好处是：代码想怎么写就怎么写，然而坏处是：代码要多渣有多渣，踩坑也是必须的
+iOS开发也已有一年半，踩过的坑实在是太多了，之前只是简单的记录下笔记，现在开始整理总结成文章，希望形成一套自己的理论体系。
+————————————–  我是一条华丽的分隔线 ————————————–
+之前一直以为，隐藏 status bar 只是一句简单的语句调用就搞定了，但在做公司的项目的过程中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS Status Bar 的隐藏">
+<meta property="og:url" content="http://jumpingfrog0.com/2016/2016-03-26-status-bar-hidden/index.html">
+<meta property="og:site_name" content="jumpingfrog0">
+<meta property="og:description" content="自己一个人负责项目的好处是：代码想怎么写就怎么写，然而坏处是：代码要多渣有多渣，踩坑也是必须的
+iOS开发也已有一年半，踩过的坑实在是太多了，之前只是简单的记录下笔记，现在开始整理总结成文章，希望形成一套自己的理论体系。
+————————————–  我是一条华丽的分隔线 ————————————–
+之前一直以为，隐藏 status bar 只是一句简单的语句调用就搞定了，但在做公司的项目的过程中">
+<meta property="og:updated_time" content="2016-03-26T08:30:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS Status Bar 的隐藏">
+<meta name="twitter:description" content="自己一个人负责项目的好处是：代码想怎么写就怎么写，然而坏处是：代码要多渣有多渣，踩坑也是必须的
+iOS开发也已有一年半，踩过的坑实在是太多了，之前只是简单的记录下笔记，现在开始整理总结成文章，希望形成一套自己的理论体系。
+————————————–  我是一条华丽的分隔线 ————————————–
+之前一直以为，隐藏 status bar 只是一句简单的语句调用就搞定了，但在做公司的项目的过程中">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> iOS Status Bar 的隐藏 | jumpingfrog0 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jumpingfrog0</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '_hsnBCSxyAH__Kvfd1uL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS Status Bar 的隐藏
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-26T16:30:42+08:00" content="2016-03-26">
+              2016-03-26
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/2016-03-26-status-bar-hidden/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/2016-03-26-status-bar-hidden/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>自己一个人负责项目的好处是：代码想怎么写就怎么写，然而坏处是：代码要多渣有多渣，踩坑也是必须的</p>
+<p>iOS开发也已有一年半，踩过的坑实在是太多了，之前只是简单的记录下笔记，现在开始整理总结成文章，希望形成一套自己的理论体系。</p>
+<p>————————————–  我是一条华丽的分隔线 ————————————–</p>
+<p>之前一直以为，隐藏 <em>status bar</em> 只是一句简单的语句调用就搞定了，但在做公司的项目的过程中，发现居然隐藏不了，纳闷了许久后算是明白了点，没想到也是蛮多坑的。</p>
+<blockquote>
+<p>以下内容均是基于 <strong>iOS 9</strong> 及其以上的，如有出入，请善用搜索引擎</p>
+</blockquote>
+<h3 id="Status-Bar-的正常隐藏"><a href="#Status-Bar-的正常隐藏" class="headerlink" title="Status Bar 的正常隐藏"></a>Status Bar 的正常隐藏</h3><h6 id="view-controllers-控制-status-bar-的隐藏"><a href="#view-controllers-控制-status-bar-的隐藏" class="headerlink" title="view-controllers 控制 status bar 的隐藏"></a>view-controllers 控制 status bar 的隐藏</h6><p>在iOS 9中，<em>status bar</em> 的隐藏默认是通过 <em>view-controlls</em> 控制的，即每个控制器决定是否隐藏 <em>status bar</em> 。</p>
+<p>只需在 <em>controller</em> 中重载 <code>prefersStatusBarHidden</code> 函数</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h6 id="全局控制-status-bar-的隐藏"><a href="#全局控制-status-bar-的隐藏" class="headerlink" title="全局控制 status bar 的隐藏"></a>全局控制 status bar 的隐藏</h6><p>如果想要全局控制，只需两步：</p>
+<ul>
+<li>在Info.plist中，添加属性 <code>View controller-based status bar appearance</code> 为 <code>NO</code></li>
+<li><p>添加如下代码</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="type">UIApplication</span>.sharedApplication().statusBarHidden = <span class="literal">true</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果想改成每个控制器自行控制，将 <code>View controller-based status bar appearance</code> 为 <code>YES</code>即可</p>
+<h3 id="Status-Bar-隐藏不了的情况"><a href="#Status-Bar-隐藏不了的情况" class="headerlink" title="Status Bar 隐藏不了的情况"></a>Status Bar 隐藏不了的情况</h3><p>但是，有时候也会有意外发生，上述方法并不能如愿隐藏 <em>status bar</em> ,那就是 <strong>在<em>ParentViewController</em> 中添加一个全屏的 <em>ChildViewController</em> ，此时想用 <em>ChildViewController</em> 来控制状态栏时</strong> ，就会失效，即使 <em>ChildViewController</em> 中的<code>prefersStatusBarHidden</code>方法返回的是<code>YES</code>，也无法隐藏 <em>status bar</em> 。</p>
+<p><strong>解决办法是：重载 <code>childViewControllerForStatusBarHidden</code>方法</strong></p>
+<p>苹果官方文档 <a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIViewController_Class/index.html#//apple_ref/occ/instm/UIViewController/childViewControllerForStatusBarHidden" target="_blank" rel="external">UIViewController Class Reference</a> 是这样解释的：</p>
+<blockquote>
+<p>Called when the system needs the view controller to use for determining status bar hidden/unhidden state.</p>
+<p>Return Value:</p>
+<p> The view controller whose status bar hidden/unhidden status should be used. Default return value is nil.</p>
+<p>Discussion:</p>
+<p>If your container view controller derives derives the hidden state of the status bar from one of its child view controllers, implement this method to specify which child view controller you want to control the hidden/unhidden state. If you return nil or do not override this method, the status bar hidden/unhidden state for self is used.</p>
+<p>If you change the return value from this method, call the <code>setNeedsStatusBarAppearanceUpdate</code> method.</p>
+</blockquote>
+<p>大概意思就是，如果你想要让你的 <em>container view controller</em> 的 <em>child view controller</em> 控制 <em>status bar</em> 的隐藏状态的话，就重载该方法，决定使用哪个 <em>child view controller</em> 来控制 <em>隐藏/非隐藏</em> 的状态。如果返回 <em>nil</em> 或不重载该方法，就用它自己来控制 <em>status bar</em> 的状态。可以通过调用 <code>setNeedsStatusBarAppearanceUpdate</code> 方法来改变该方法返回的值，即再调用该方法一次。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StatusBarHiddenParentController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> childController: <span class="type">StatusBarHiddenChildController</span>?</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line"></div><div class="line">        childController = <span class="type">StatusBarHiddenChildController</span>.fromStoryboard(<span class="string">"Main"</span>)</div><div class="line">        addChildViewController(childController!)</div><div class="line">        view.addSubview(childController!.view)</div><div class="line">        setNeedsStatusBarAppearanceUpdate()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">childViewControllerForStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">UIViewController</span>? &#123;</div><div class="line">        <span class="keyword">return</span> childController</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StatusBarHiddenChildController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line"></div><div class="line">        <span class="comment">// Do any additional setup after loading the view.</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码最终能将状态栏隐藏，即使在 <em>StatusBarHiddenParentController</em> 中的<code>prefersStatusBarHidden</code>返回的是<code>NO</code></p>
+<p>注意：因为<code>childViewControllerForStatusBarHidden</code>会比<code>viewDidLoad</code> 先调用，所以在<code>viewDidLoad</code>中要调用<code>setNeedsStatusBarAppearanceUpdate</code></p>
+<p>有时候我们需要关闭控制器视图，如下列三种情况：</p>
+<ul>
+<li>将控制器从navigationController的堆栈中pop出去</li>
+<li>将present出来的控制器dismiss掉</li>
+<li>将子控制器从父控制器中移除</li>
+</ul>
+<p><em>push</em> 和 <em>present</em> 两种方式展示的 <em>view controller</em> 在 <em>pop</em> 和 <em>dismiss</em> 时都能够自动还原 <em>status bar</em> 的状态。但是，把子控制器从父控制器中移除时，就会出现奇怪的问题， <em>status bar</em> 并不能自动还原，因此还需要特别处理。</p>
+<p>我们可以设置一个Bool变量 <code>statusBarHidden</code> 用来记录目前 <em>statusBar</em> 是否隐藏，在 <code>prefersStatusBarHidden</code> 函数中返回 <code>statusBarHidden</code>值。在要移除子控制器的函数中做两步操作：</p>
+<ol>
+<li>先将 <code>statusBarHidden</code> 设置为 <code>False</code>, 并调用 <code>setNeedsStatusBarAppearanceUpdate</code> 刷新状态栏</li>
+<li>再将子控制器移除。</li>
+</ol>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StatusBarHiddenRemoveWayChildController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> statusBarHidden: <span class="type">Bool</span> = <span class="literal">true</span></div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> removeButton = <span class="type">UIButton</span>(frame: <span class="type">CGRectMake</span>(<span class="number">30</span>, <span class="number">80</span>, <span class="number">100</span>, <span class="number">30</span>))</div><div class="line">        removeButton.setTitle(<span class="string">"remove"</span>, forState: .<span class="type">Normal</span>)</div><div class="line">        removeButton.addTarget(<span class="keyword">self</span>, action: <span class="string">"remove"</span>, forControlEvents: .<span class="type">TouchUpInside</span>)</div><div class="line">        view.addSubview(removeButton)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 1. set `statusBarHidden` into `false`, and then refresh status bar</span></div><div class="line">    <span class="comment">// 2. remove from parent controller</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">remove</span><span class="params">()</span></span> &#123;</div><div class="line">        statusBarHidden = <span class="literal">false</span></div><div class="line">        setNeedsStatusBarAppearanceUpdate()</div><div class="line">        </div><div class="line">        view.removeFromSuperview()</div><div class="line">        removeFromParentViewController()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">return</span> statusBarHidden</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="使用-Method-Swizzling-隐藏-Status-Bar"><a href="#使用-Method-Swizzling-隐藏-Status-Bar" class="headerlink" title="使用 Method Swizzling 隐藏 Status Bar"></a>使用 Method Swizzling 隐藏 Status Bar</h3><p>对于 <em>status bar</em> 隐藏不了的情况，除了上面介绍的方法，iOS 中还有一种强大的黑魔法 <em><a href="http://nshipster.com/method-swizzling/" target="_blank" rel="external">Method Swizzling</a></em>，这里设计到了 <strong>Objective-C</strong> 语言的 <em><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ObjCRuntimeRef/index.html#//apple_ref/c/func/method_getImplementation" target="_blank" rel="external">runtime</a></em> 特性，这是一个值得深入学习和研究的知识。</p>
+<p>我们只需要在 <em>ChildeViewController</em> 中对 <em>ParentViewController</em> 的 <code>prefersStatusBarHidden</code> 方法进行 <em>Hook</em> ，然后偷天换日，换成我们自己实现的方法，使其返回 <code>true</code> ，然后刷新状态栏，就可以隐藏 <em>status bar</em> 了。</p>
+<p>代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StatusBarHiddenSwizzlingChildController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewWillAppear</span><span class="params">(animated: Bool)</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewWillAppear(animated)</div><div class="line">        </div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> parentViewController = parentViewController <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> parentViewController.respondsToSelector(<span class="string">"setNeedsStatusBarAppearanceUpdate"</span>) &#123;</div><div class="line">            </div><div class="line">            hookPrefersStatusBarHidden(parentViewController)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">hookPrefersStatusBarHidden</span><span class="params">(parentViewController: UIViewController)</span></span> &#123;</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> originalSelector = <span class="type">Selector</span>(<span class="string">"prefersStatusBarHidden"</span>)</div><div class="line">        <span class="keyword">let</span> swizzledSelector = <span class="type">Selector</span>(<span class="string">"hook_prefersStatusBarHidden"</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> originalMethod = class_getInstanceMethod(parentViewController.<span class="keyword">dynamicType</span>, originalSelector)</div><div class="line">        <span class="keyword">let</span> swizzledMethod = class_getInstanceMethod(<span class="keyword">self</span>.<span class="keyword">dynamicType</span>, swizzledSelector)</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> didAddMethod: <span class="type">Bool</span> = class_addMethod(parentViewController.<span class="keyword">dynamicType</span>,</div><div class="line">            originalSelector,</div><div class="line">            method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> didAddMethod &#123;</div><div class="line">            class_replaceMethod(<span class="keyword">self</span>.<span class="keyword">dynamicType</span>,</div><div class="line">                swizzledSelector,</div><div class="line">                method_getImplementation(originalMethod),</div><div class="line">                method_getTypeEncoding(originalMethod))</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            method_exchangeImplementations(originalMethod, swizzledMethod)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        dispatch_async(dispatch_get_main_queue()) &#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">        </div><div class="line">            parentViewController.prefersStatusBarHidden()</div><div class="line">            parentViewController.setNeedsStatusBarAppearanceUpdate()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// must recover the hook when view will disappear</span></div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewWillDisappear</span><span class="params">(animated: Bool)</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewWillDisappear(animated)</div><div class="line">        </div><div class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> parentViewController = parentViewController <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> parentViewController.respondsToSelector(<span class="string">"setNeedsStatusBarAppearanceUpdate"</span>) &#123;</div><div class="line">            </div><div class="line">            hookPrefersStatusBarHidden(parentViewController)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">hook_prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意事项：</p>
+<ul>
+<li>必须在 <em>ChildViewController</em> 的 <code>viewWillDisappear</code> 中将 <em>Hook</em> 的方法还原回来，否则可能会出现奇怪的问题。</li>
+<li><em>ParentViewController</em> 中尽可能重载 <code>prefersStatusBarHidden</code> 方法，因为 <em>Method Swizzling</em> 有很多细节需要谨慎处理，如果 <code>hookPrefersStatusBarHidden</code> 写的有bug，会导致奇怪的问题。</li>
+</ul>
+</blockquote>
+<h3 id="滚动ScrollView或TableView时隐藏Status-Bar和Navigation-Bar"><a href="#滚动ScrollView或TableView时隐藏Status-Bar和Navigation-Bar" class="headerlink" title="滚动ScrollView或TableView时隐藏Status Bar和Navigation Bar"></a>滚动ScrollView或TableView时隐藏Status Bar和Navigation Bar</h3><p>京东和淘宝客户端的商品搜索结果页面，在滚动时可以隐藏 <em>status bar</em> 和 <em>navigation bar</em> ，我自认为这是一个很好的设计，身为一个有追求的程序员，这个功能的实现那当然也不能放过啦~~</p>
+<p><em>NavigationController</em> 有一个属性 <code>hidesBarsOnSwipe</code>，可以实现轻扫时隐藏 <em>navigation bar</em> ，与之对应的手势是它的另一个属性<code>barHideOnSwipeGestureRecognizer</code>，只要给这个手势添加一个方法来控制 <em>status bar</em> ，就可以实现同时隐藏 <em>status bar</em> 和 <em>navigation bar</em> 了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">StatusBarAndNavigationBarHiddenOnSwipeController</span>: <span class="title">UITableViewController</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> hideStatusBar = <span class="literal">false</span></div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line">        </div><div class="line">        view.backgroundColor = <span class="type">UIColor</span>.grayColor()</div><div class="line">        </div><div class="line">        navigationController?.barHideOnSwipeGestureRecognizer.addTarget(<span class="keyword">self</span>, action: <span class="string">"swipe:"</span>)</div><div class="line">        navigationController?.hidesBarsOnSwipe = <span class="literal">true</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">prefersStatusBarHidden</span><span class="params">()</span></span> -&gt; <span class="type">Bool</span> &#123;</div><div class="line">        <span class="keyword">return</span> hideStatusBar</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">swipe</span><span class="params">(recognizer: UISwipeGestureRecognizer)</span></span> &#123;</div><div class="line">        </div><div class="line">        hideStatusBar = navigationController?.navigationBar.frame.origin.y &lt; <span class="number">0</span></div><div class="line">        </div><div class="line">        <span class="type">UIView</span>.animateWithDuration(<span class="number">0.2</span>) &#123; () -&gt; <span class="type">Void</span> <span class="keyword">in</span></div><div class="line">            </div><div class="line">            <span class="keyword">self</span>.setNeedsStatusBarAppearanceUpdate()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">preferredStatusBarUpdateAnimation</span><span class="params">()</span></span> -&gt; <span class="type">UIStatusBarAnimation</span> &#123;</div><div class="line">        <span class="keyword">return</span> .<span class="type">Slide</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>本文章所有示例代码下载地址：<a href="/download/2016-03-26-status-bar-hidden-demo.zip">Demo</a></p>
+<hr>
+<p>扩展阅读：<a href="http://swifter.tips/swizzle/" target="_blank" rel="external">SWIZZLE</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/2016-03-26-establish-static-blog-with-hexo/" rel="prev" title="使用Hexo搭建静态博客">
+                使用Hexo搭建静态博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/2016-03-26-status-bar-hidden/"
+           data-title="iOS Status Bar 的隐藏" data-url="http://jumpingfrog0.com/2016/2016-03-26-status-bar-hidden/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/minion.jpeg"
+               alt="jumpingfrog0" />
+          <p class="site-author-name" itemprop="name">jumpingfrog0</p>
+          <p class="site-description motion-element" itemprop="description">Know a lot about a little, know a little about a lot</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jumpingfrog0" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3290250165/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-dong-hong" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/704851a93179/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Status-Bar-的正常隐藏"><span class="nav-number">1.</span> <span class="nav-text">Status Bar 的正常隐藏</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#view-controllers-控制-status-bar-的隐藏"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">view-controllers 控制 status bar 的隐藏</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#全局控制-status-bar-的隐藏"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">全局控制 status bar 的隐藏</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Status-Bar-隐藏不了的情况"><span class="nav-number">2.</span> <span class="nav-text">Status Bar 隐藏不了的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Method-Swizzling-隐藏-Status-Bar"><span class="nav-number">3.</span> <span class="nav-text">使用 Method Swizzling 隐藏 Status Bar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滚动ScrollView或TableView时隐藏Status-Bar和Navigation-Bar"><span class="nav-number">4.</span> <span class="nav-text">滚动ScrollView或TableView时隐藏Status Bar和Navigation Bar</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jumpingfrog0</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jumpingfrog0"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>

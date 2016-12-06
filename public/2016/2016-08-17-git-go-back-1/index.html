@@ -1,0 +1,1004 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jumpingfrog0, Swift, iOS" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="概述这次主要来讲讲Git的反悔操作，自己平时在写代码的过程中经常会出现想要弃用所有的改动或回滚到上一次commit的情况。Git上的反悔操作有reset、rebase、revert等，每个操作各有区别和对应的使用场景，这里做下总结。
+Git的反悔操作有两大类:
+
+撤销改动 ( Undoing Change )
+重写历史 ( Rewriting History )
+
+
+文章大部分翻译于 Undoin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git的反悔操作(一)">
+<meta property="og:url" content="http://jumpingfrog0.com/2016/2016-08-17-git-go-back-1/index.html">
+<meta property="og:site_name" content="jumpingfrog0">
+<meta property="og:description" content="概述这次主要来讲讲Git的反悔操作，自己平时在写代码的过程中经常会出现想要弃用所有的改动或回滚到上一次commit的情况。Git上的反悔操作有reset、rebase、revert等，每个操作各有区别和对应的使用场景，这里做下总结。
+Git的反悔操作有两大类:
+
+撤销改动 ( Undoing Change )
+重写历史 ( Rewriting History )
+
+
+文章大部分翻译于 Undoin">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/05.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/B419EBE2-88F9-4736-BFBB-8003DEDA13F6.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/06.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/02.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/598F500E-7F1F-4103-8D50-417B5AE71481.png">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/git-revert-01.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/04.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/git-revert-02.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/04.svg">
+<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/commit-after-git-reset.svg">
+<meta property="og:updated_time" content="2016-08-28T15:34:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git的反悔操作(一)">
+<meta name="twitter:description" content="概述这次主要来讲讲Git的反悔操作，自己平时在写代码的过程中经常会出现想要弃用所有的改动或回滚到上一次commit的情况。Git上的反悔操作有reset、rebase、revert等，每个操作各有区别和对应的使用场景，这里做下总结。
+Git的反悔操作有两大类:
+
+撤销改动 ( Undoing Change )
+重写历史 ( Rewriting History )
+
+
+文章大部分翻译于 Undoin">
+<meta name="twitter:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/05.svg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Git的反悔操作(一) | jumpingfrog0 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jumpingfrog0</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '_hsnBCSxyAH__Kvfd1uL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git的反悔操作(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-28T23:34:53+08:00" content="2016-08-28">
+              2016-08-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/2016-08-17-git-go-back-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/2016-08-17-git-go-back-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这次主要来讲讲<code>Git</code>的反悔操作，自己平时在写代码的过程中经常会出现想要弃用所有的改动或回滚到上一次<code>commit</code>的情况。<code>Git</code>上的反悔操作有<code>reset</code>、<code>rebase</code>、<code>revert</code>等，每个操作各有区别和对应的使用场景，这里做下总结。</p>
+<p><code>Git</code>的反悔操作有两大类:</p>
+<ul>
+<li>撤销改动 ( Undoing Change )</li>
+<li>重写历史 ( Rewriting History )</li>
+</ul>
+<blockquote>
+<p>文章大部分翻译于 <a href="https://www.atlassian.com/git/tutorials/undoing-changes" target="_blank" rel="external">Undoing Changes</a> 和 <a href="https://www.atlassian.com/git/tutorials/rewriting-history" target="_blank" rel="external">Rewriting history</a>，并结合了自己的一些理解和补充。</p>
+</blockquote>
+<h2 id="撤销改动-Undoing-Change"><a href="#撤销改动-Undoing-Change" class="headerlink" title="撤销改动(Undoing Change)"></a>撤销改动(Undoing Change)</h2><h3 id="git-checkout"><a href="#git-checkout" class="headerlink" title="git checkout"></a>git checkout</h3><p><code>git checkout</code>有三个不同的功能：切换分支、回滚至某个commit、回滚一个文件至某个commit。切换分支是<code>git checkout</code>最常见的功能，不做介绍，这里主要介绍下它在撤销文件改动上的应用。</p>
+<h4 id="回滚至某个commit"><a href="#回滚至某个commit" class="headerlink" title="回滚至某个commit"></a>回滚至某个commit</h4><pre><code>git chekcout &lt;commit&gt;
+</code></pre><p>上面的命令是回滚到工作目录中指定的 commit 上，这是一个 <strong>只读</strong> 操作，不会影响到当前工作区的状态，它在你查看旧版本的文件时不会损坏你的代码仓库。通常，<code>HEAD</code>指向master分支或其他本地分支，当使用<code>git checkout</code>回滚到以前的 commit 时，<code>HEAD</code>就不再指向某个分支了，而是直接指向一个commit，这时就叫做<code>detached HEAD</code>状态。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/05.svg" alt=""></p>
+<p>切换到<code>detached HEAD</code>状态时，会有一个警告。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/B419EBE2-88F9-4736-BFBB-8003DEDA13F6.png" alt="警告"></p>
+<p>这个警告是告诉你，你现在做的所有事情与你开发项目的其余工作区是分离的，即所有的改动与本地仓库的任一分支都无关，不会影响到其他的分支的状态。如果你准备在<code>detached HEAD</code>状态下开发新的feature，那将会没有分支允许你回退这里，当你不可避免地切换到其他分支时，将没有任何办法引用到这个feature。你可以把<code>detached HEAD</code>状态看作是正在一个未命名的分支上。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/06.svg" alt=""></p>
+<blockquote>
+<p><strong><a href="https://git-scm.com/book/tr/v2/Git-Internals-Git-References" target="_blank" rel="external">HEAD</a></strong> 和 <strong><a href="https://www.atlassian.com/git/tutorials/using-branches/git-checkout" target="_blank" rel="external">detached HEAD</a></strong> 的区别可以参考 <a href="http://stackoverflow.com/questions/5772192/how-can-i-reconcile-detached-head-with-master-origin" target="_blank" rel="external">How can I reconcile detached HEAD with master/origin?</a></p>
+<p>将英文翻译为中文经常会词不达意，很难把握，建议还是看英文原文:)。</p>
+</blockquote>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><p>假设你正在进行一次疯狂的重构，但现在你不确定是否要继续下去。这时你想要看一下开始这次重构之前项目原来的样子，首先你需要找到你想要查看的版本的ID。</p>
+<pre><code>git log --oneline
+</code></pre><p>假设你的项目历史看起来像下面这样：</p>
+<pre><code>b7119f2 Continue doing crazy things
+872fa7e Try something crazy
+a1e8fb5 Make some important changes to hello.py
+435b61d Create hello.py
+9773e52 Initial import
+</code></pre><p>你可以使用<code>git checkout</code>查看<code>Make some important changes to hello.py</code>这次commit，如下：</p>
+<pre><code>git checkout a1e8fb5
+</code></pre><p>这让你的工作区切换到了<code>a1e8fb5</code>comimit的状态。你可以查看文件、编译项目、运行测试用例，甚至编辑文件，完全不用担心丢失项目“当前”的状态，你在这里做的所有修改都不会被保存到项目中。当你想要继续那次疯狂的重构时，你需要回到项目的“当前”状态。</p>
+<pre><code>git checkout master
+</code></pre><h4 id="回滚一个文件至某个commit"><a href="#回滚一个文件至某个commit" class="headerlink" title="回滚一个文件至某个commit"></a>回滚一个文件至某个commit</h4><pre><code>git checkout &lt;commit&gt; &lt;file&gt;
+</code></pre><p>回滚一个文件到以前的一个版本，这个操作会 <strong>影响</strong> 当前工作区的状态。</p>
+<p>你可以在一个新的快照中重新提交这个旧版本，当然也包含其他任何文件。实际上，<code>checkout</code>的这个用法和<code>revert</code>类似，只不过是仅针对一个文件。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/02.svg" alt=""></p>
+<h5 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h5><p>如果你只对单个文件感兴趣，你可以使用    <code>git checkout</code> 获取到该文件的旧版本。比如，如果你只想要看看 某次commit下的<code>hello.py</code>文件，可以使用下面的命令：</p>
+<pre><code>git checkout a1e8fb5 hello.py
+</code></pre><p>记住，不像切换commit，这会影响当前项目的状态。这个旧版本的文件的状态会变为 <code>Change to be committed</code>，给你一个机会将该文件恢复到先前的版本。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/598F500E-7F1F-4103-8D50-417B5AE71481.png" alt=""></p>
+<p>如果你决定不需要保留这个旧版本了，你可以切换到最近的版本，如下：</p>
+<pre><code>git checkout HEAD hello.py
+</code></pre><h3 id="git-revert"><a href="#git-revert" class="headerlink" title="git revert"></a>git revert</h3><p><code>git revert</code> 可以撤销一个已提交的快照(snapshot)，但它解决的是如何撤销已提交的被引入的改动，并生成内容来追加一个新的提交，而不是从项目的历史中移除这个提交，这避免了丢失历史记录，这对于项目的每一次修改的历史记录的完整性来说非常重要，并这是服务于可靠的多人协作开发的。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/git-revert-01.svg" alt=""></p>
+<pre><code>git revert &lt;commit&gt;
+</code></pre><p>这句命令会撤销这次<commit>所有被引入的改动，生成一个新的commit，并应用在当前分支上。</commit></p>
+<p>当你想从你的项目历史中移除一个完整的commit时，就应该使用<code>git revert</code>。比如，你正在追踪一个Bug并发现它是在一次单一的commit中被引入的，你可以手动进行修改，删除有Bug的代码来修复它，然后提交一个新的快照，但这样很麻烦，效率也很低，你更应该做的是，使用<code>git revert</code>自动完成，撤销这次commit所有被引入的改动。</p>
+<h4 id="Reverting-vs-Resetting"><a href="#Reverting-vs-Resetting" class="headerlink" title="Reverting vs. Resetting"></a>Reverting vs. Resetting</h4><p>很重要的一点，<code>revert</code>是对一次单一的commit的撤销，并不是真正意义上的回滚。它不是通过移除项目中一次commit后面的所有提交来“回滚”之前的状态，实际上那样的操作在<code>Git</code>上被叫做<code>reset</code>，而不是<code>revert</code>。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/04.svg" alt=""></p>
+<p>比起<code>reset</code>，<code>revert</code>有两个重要的好处：</p>
+<ul>
+<li><p><code>revert</code>不会改变项目的历史。如果那些commits已经推到了共享的代码仓库，它会是一个“安全”的操作。为什么改变共享代码仓库的历史是危险的，请看后面的<code>git reset</code>的介绍。</p>
+</li>
+<li><p><code>revert</code>可以作用于历史中 <strong>任意</strong> 的单一的commit节点，然而<code>reset</code>只能做到从当前 <strong>最新</strong> 的commit开始回滚。比如说，如果你想要只撤销一次旧的指定的commit，使用<code>git reset</code>，你则必须移除该commit和该commit之后出现的所有commits，然后再把那些随后的commit重新提交。毫无疑问，这种撤销的方式一点都不优雅。</p>
+</li>
+</ul>
+<h4 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h4><p>下面的例子是<code>git revert</code>的一个简单示例，提交了一个快照，然后立即使用<code>revert</code>撤销了它。</p>
+<pre><code># Edit some tracked files
+
+# Commit a snapshot
+git commit -m &quot;Make some changes that will be undone&quot;
+
+# Revert the commit we just created
+git revert HEAD
+</code></pre><p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/git-revert-02.svg" alt=""></p>
+<blockquote>
+<p>注意：在<code>revert</code>后，第4次commit仍然被保留在项目历史中，<code>git revert</code>新增了一个新的commit来撤销它的改动，而不是删除它。结果就是，第3次和第5次commit的代码是完全一样的，第4次commit依然保留在历史中，以防我们想要重新回滚到这里。</p>
+</blockquote>
+<h4 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h4><p>假设你发现在某次commit中引入了一个bug，你想使用 <code>git revert</code>来回滚。查看历史：</p>
+<pre><code>git log --oneline
+</code></pre><p>项目历史如下：</p>
+<pre><code>417e4a9 commit 4
+427d76b commit 3
+1642475 introduced a bug
+71d3ef7 commit 1
+bf4f6f6 git initial
+</code></pre><p>使用 <code>revert</code> 回滚到 <code>1642475</code></p>
+<pre><code>git revert 1642475
+</code></pre><p>但你会发现没有想象中那么简单，而是发生冲突了，报错如下：</p>
+<pre><code>error: could not revert 1642475... introduced a bug
+hint: after resolving the conflicts, mark the corrected paths
+hint: with &apos;git add &lt;paths&gt;&apos; or &apos;git rm &lt;paths&gt;&apos;
+hint: and commit the result with &apos;git commit&apos;
+</code></pre><p><code>revert</code> 仅仅是撤销<code>introduced a bug</code>这一commit的改动，默认会生成一个新的commit提交，但在它之后还有<code>commit 3</code>和<code>commit 4</code>，它们的改动不会被影响，依然保留在工作区中，因此产生了冲突。你可以手动解决冲突后commit，但这却是个麻烦且不优雅的方式。因为<code>1642475</code>、<code>427d76b</code>和<code>417e4a9</code>这几个commit的改动被一起合并在暂存区中，如果你修改的不止一个文件，那手动解决冲突将会非常麻烦。解决方式是，默认 <em>不</em> 生成新的commit，并按顺序回滚。</p>
+<p>先强制结束<code>revert</code></p>
+<pre><code>git revert --abort
+</code></pre><p>按顺序回滚</p>
+<pre><code>git revert 417e4a9 --no-commit
+git revert 427d76b --no-commit
+git revert 1642475 --no-commit    
+git revert --continue
+</code></pre><blockquote>
+<p><code>git revert --continue</code>，会生成带默认message的commit。</p>
+<p>更多参数说明详见：<a href="https://git-scm.com/docs/git-revert" target="_blank" rel="external">git-revert-document</a></p>
+</blockquote>
+<p><a href="id:git-reset" target="_blank" rel="external"></a></p>
+<h3 id="git-reset"><a href="#git-reset" class="headerlink" title="git reset"></a>git reset</h3><p>如果<code>git revert</code>是以一个”安全””的方式来撤销改动，那你可以认为<code>git reset</code>是一种 <em>危险</em> 的方式。当你使用<code>git reset</code>后，将没有办法恢复原样，它是一个永恒的撤销,因为那些commits不再被任何<code>ref</code>或<code>reflog</code>引用。在使用这个工具时请务必谨慎，因为它是<code>git</code>命令中唯一一个潜在的使你的努力付诸东流的命令。</p>
+<p><code>git reset</code>是一个功能丰富的命令，它可以用于移除已提交的快照，但它更多的是用来撤销暂存区和工作区的改动，另一种情况是，它应该只用于撤销本地的改动（不应该<code>reset</code>那些已经与其他开发者共享了的快照）。</p>
+<h4 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h4><pre><code>git reset &lt;file&gt;
+</code></pre><p>从暂存区中移除指定的文件，但保留工作区不变。它<code>unstage</code>了 <em>一个</em> 文件且没有覆盖任何改动。</p>
+<blockquote>
+<p>把文件加入暂存区叫做<code>stage</code>，文件修改过但还未使用<code>git add</code>加入暂存区叫做<code>unstage</code></p>
+</blockquote>
+<pre><code>git reset
+</code></pre><p>重置暂存区匹配至最近的一次commit，但保留工作区不变。它<code>unstage</code>了 <em>所有</em> 文件且没有覆盖任何改动，让你有机会从头开始重建暂存快照。</p>
+<pre><code>git reset --hard
+</code></pre><p>重置暂存区和工作区匹配至最近的一次commit。除了<code>unstage</code>所有文件外，<code>--hard</code>还告诉<code>Git</code>也一并覆盖工作区的所有改动，也就是说，这个操作撤销了所有未提交的改动，所以在使用它前，请确定你是真的想丢弃本地的开发。</p>
+<pre><code>git reset &lt;commit&gt;
+</code></pre><p>将当前分支的HEAD移动至<code>&lt;commit&gt;</code>，重置暂存区匹配至<code>&lt;commit&gt;</code>，但不包括工作区。从<code>&lt;commit&gt;</code>开始的所有改动会被驻留在工作区，这让你可以使用更干净、更原子性的快照来重新提交项目历史。</p>
+<pre><code>git reset --hard &lt;commit&gt;
+</code></pre><p>将当前分支的HEAD移动至<code>&lt;commit&gt;</code>以及重置暂存区和工作区匹配至<code>&lt;commit&gt;</code>。它不仅撤销了未提交的改动，还撤销了<code>&lt;commit&gt;</code>之后的所有commits。</p>
+<h4 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h4><p>正如上面提及到的，<code>git reset</code>是用来从一个代码仓库中移除改动的。没有<code>--hard</code>标记时，<code>git reset</code>通过<code>unstage</code>改动或撤销(uncommit)一系列已提交的快照来清理干净代码仓库，然后重头开始重建它们。当一个试验已经往可怕的方向发展时，<code>--hard</code>标记就派上用场了，你需要一个干净的工作空间。</p>
+<p><code>reset</code>是被设计来撤销 <em>本地</em> 的改动的，而<code>revert</code>是被设计来安全地撤销 <em>公有</em> 的commit的。出于完全不同的目的，这两个命令的执行结果也不同：<code>reset</code>是完全地移除有改动的地方，而<code>revert</code>则是维持原来的改动，使用一个新的commit来达到撤销的目的。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/04.svg" alt=""></p>
+<h4 id="不要重置公有的历史"><a href="#不要重置公有的历史" class="headerlink" title="不要重置公有的历史"></a>不要重置公有的历史</h4><p>当<code>&lt;commit</code>后面的任一快照被推送到公有仓库时，你就不应该使用<code>git reset &lt;commit&gt;</code>，推送一个commit到公有仓库后，就必须假设其他开发者是依赖于它的。删除一个其他团队成员在此基础上持续开发的commit会引发团队协作上的严重问题，当他们尝试与你的代码仓库同步时，就像一大块项目历史突然地消失了。</p>
+<p>下面的例子就是当你尝试<code>reset</code>一个公有的commit时会发生的。</p>
+<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/commit-after-git-reset.svg" alt=""></p>
+<p>一旦你在<code>reset</code>后新增一个commit，<code>Git</code>会认为你本地的历史与<code>origin/master</code>背道而驰了，当合并commit时，需要先同步你的代码仓库，这就有可能使你的团队感到迷惑和无助。</p>
+<p>所以重点就是，你打算用<code>git reset &lt;commit&gt;</code>来撤销你那糟糕的试验时，请确保它只作用于本地（还没被推送至远程服务器）的改动。如果你需要修复一个公有的commit，请使用<code>git revert</code>，因为它正是为了这个目的而被设计的。</p>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><h5 id="Unstage-一个文件"><a href="#Unstage-一个文件" class="headerlink" title="Unstage 一个文件"></a>Unstage 一个文件</h5><p>假设有两个文件<code>hello.py</code>和<code>main.py</code>，已经被添加到<code>Git</code>仓库中，修改这两文件并进行提交。</p>
+<pre><code># Edit both hello.py and main.py
+
+# Stage everything in the current directory
+git add .
+
+# Realize that the changes in hello.py and main.py
+# should be committed in different snapshots
+
+# Unstage main.py
+git reset main.py
+
+# Commit only hello.py
+git commit -m &quot;Make some changes to hello.py&quot;
+
+# Commit main.py in a separate snapshot
+git add main.py
+git commit -m &quot;Edit main.py&quot;
+</code></pre><p>正如你所看到的，你可以使用<code>git reset</code>来<code>unstage</code>掉一些不小心加入暂存区但又与此次commit无关的文件，让你的commits保持高度的专一。</p>
+<h5 id="移除本地的commits"><a href="#移除本地的commits" class="headerlink" title="移除本地的commits"></a>移除本地的commits</h5><p>接下来的例子展示了一个更高级的使用情况，它示范了你在一个新的试验上工作了一段时间并在提交了一些快照后，决定彻底抛弃它这整个过程究竟发生了什么。</p>
+<pre><code># Create a new file called `foo.py` and add some code to it
+
+# Commit it to the project history
+git add foo.py
+git commit -m &quot;Start developing a crazy feature&quot;
+
+# Edit `foo.py` again and change some other tracked files, too
+
+# Commit another snapshot
+git commit -a -m &quot;Continue my crazy feature&quot;
+
+# Decide to scrap the feature and remove the associated commits
+git reset --hard HEAD~2
+</code></pre><p><code>git reset HEAD~2</code>这句命令让当前分支回滚了两个提交，实际上，从项目历史上删除了我们刚刚创建的两个快照。请记住，这种类型的<code>reset</code>应该只用在未推送到远程服务器的commits上，绝不要在那些已经被推送至公有仓库的commits上执行上面的操作。</p>
+<h3 id="git-clean"><a href="#git-clean" class="headerlink" title="git clean"></a>git clean</h3><p><code>git clean</code>从工作区移除未追踪的文件。这的确是一个更方便的命令，因为它使用<code>git status</code>琐细地查看哪些文件未追踪，然后手动删除它们。就像普通的<code>rm</code>命令一样，<code>git clean</code>是不可恢复的，所以在运行它之前请确保你是真的想要删除那些未追踪的文件。</p>
+<p><code>git clean</code>命令经常和<code>git reset --hard</code>一起被执行，<code>reset</code>仅仅影响已追踪的文件，因此需要<code>git clean</code>来单独清理未追踪的文件，这两个命令相结合可以让你的工作区回滚到一个特定的commit的确切状态。</p>
+<h4 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h4><pre><code>git clean -n
+</code></pre><p>执行<code>git clean</code>的“演习”。这向您展示哪个文件将会被删除，但不会真正地执行。</p>
+<pre><code>git clean -f
+</code></pre><p>从当前工作区中移除未追踪的文件。<code>-f(force)</code>标记是必需的，除非<code>clean.requireForce</code>选项被设为<code>false</code>（默认是<code>true</code>）。这不会移除<code>.gitignore</code>指定的未追踪的文件。</p>
+<pre><code>git clean -f &lt;path&gt;
+</code></pre><p>移除未追踪的文件，但仅限于操作指定的路径。</p>
+<pre><code>git clean -df
+</code></pre><p>从当前工作区中移除未追踪的文件和目录。</p>
+<pre><code>git clean -xf
+</code></pre><p>从当前工作区中移除未追踪的文件，包括<code>Git</code>忽略的文件。</p>
+<h4 id="讨论-1"><a href="#讨论-1" class="headerlink" title="讨论"></a>讨论</h4><p>当你在本地仓库中做了一些令人尴尬的开发想要销毁证据时，<code>git reset --hard</code>和<code>git clean -f</code>会是你最好的朋友，运行着两个命令将会使你的工作区回滚至最近的一次commit，还你一个干净的工作区。</p>
+<p><code>git clean</code>在<code>build</code>后清理工作区是很有用的，比如，你可以很容易地移除<code>.o</code>和<code>.exe</code>等C编译器生成的二进制文件，这是偶尔打包项目发布前的必要步骤，<code>-x</code>选项达到这个目的特别方便。</p>
+<p>记住，一起使用<code>git reset</code>和<code>git clean</code>是唯一一个具有潜在威胁的永久地删除提交的命令，所以请谨慎使用。事实上，在使用<code>git clean</code>时，-f<code>是必须的，</code>Git`的维护者甚至将它作为最基本的操作，而很多人会忘记的这一重要步骤，但这也预防了愚蠢行为而一不小心突然地删除所有辛辛苦苦写的代码。</p>
+<h4 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h4><p>下面的例子撤销了工作区所有的改动，包括新增的文件。假设你已经提交了一些快照，然后正在尝试一些些新的开发，但不知道自己做了什么导致了一些错误，想要撤销然后重新开始。</p>
+<pre><code># Edit some existing files
+# Add some new files
+# Realize you have no idea what you&apos;re doing
+
+# Undo changes in tracked files
+git reset --hard
+
+# Remove untracked files
+git clean -df
+</code></pre><p>运行完<code>reset/clean</code>一系列命令后，工作区和暂存区回滚到最近的commit，<code>git status</code>将会告诉你这是一个干净的工作区，你现在可以准备重新开始了。</p>
+<p>注意，那些新增的文件没有被加入暂存区，它们不会被<code>git reset --hard</code>影响，必须使用<code>git clean</code>删除它们。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/2016-08-16-ios-enterprise-application-distribution/" rel="next" title="iOS 企业内部(In-House)应用分发">
+                <i class="fa fa-chevron-left"></i> iOS 企业内部(In-House)应用分发
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/2016-08-17-git-go-back-2/" rel="prev" title="Git的反悔操作(二)">
+                Git的反悔操作(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/2016-08-17-git-go-back-1/"
+           data-title="Git的反悔操作(一)" data-url="http://jumpingfrog0.com/2016/2016-08-17-git-go-back-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/minion.jpeg"
+               alt="jumpingfrog0" />
+          <p class="site-author-name" itemprop="name">jumpingfrog0</p>
+          <p class="site-description motion-element" itemprop="description">Know a lot about a little, know a little about a lot</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jumpingfrog0" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3290250165/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-dong-hong" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/704851a93179/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#撤销改动-Undoing-Change"><span class="nav-number">2.</span> <span class="nav-text">撤销改动(Undoing Change)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-checkout"><span class="nav-number">2.1.</span> <span class="nav-text">git checkout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#回滚至某个commit"><span class="nav-number">2.1.1.</span> <span class="nav-text">回滚至某个commit</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#示例"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回滚一个文件至某个commit"><span class="nav-number">2.1.2.</span> <span class="nav-text">回滚一个文件至某个commit</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#示例-1"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-revert"><span class="nav-number">2.2.</span> <span class="nav-text">git revert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reverting-vs-Resetting"><span class="nav-number">2.2.1.</span> <span class="nav-text">Reverting vs. Resetting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例1"><span class="nav-number">2.2.2.</span> <span class="nav-text">示例1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例2"><span class="nav-number">2.2.3.</span> <span class="nav-text">示例2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-reset"><span class="nav-number">2.3.</span> <span class="nav-text">git reset</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用法"><span class="nav-number">2.3.1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#讨论"><span class="nav-number">2.3.2.</span> <span class="nav-text">讨论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不要重置公有的历史"><span class="nav-number">2.3.3.</span> <span class="nav-text">不要重置公有的历史</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例-2"><span class="nav-number">2.3.4.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Unstage-一个文件"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">Unstage 一个文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#移除本地的commits"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">移除本地的commits</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-clean"><span class="nav-number">2.4.</span> <span class="nav-text">git clean</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用法-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#讨论-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">讨论</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">示例</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jumpingfrog0</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jumpingfrog0"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
