@@ -1,0 +1,921 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="访问控制（Access Control）Swift中有非常完备的代码访问控制，代码写的好不好，从你的代码访问控制上就可以一眼看出。特别是在开源项目中，接口的设计及其重要，要简单易用，不暴露实现细节，做到可扩展性强，同时又要保证某些私有属性和方法不被使用者调用以避免Bug，这一切都是建立在访问控制的基础上的。设计模式中的开闭原则: 对扩展开发，对修改关闭就很好的诠释了访问控制的意思。
+
+访问控制可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift3 访问控制（Access Control）">
+<meta property="og:url" content="http://jumpingfrog0.com/2016/2016-12-09-swift-access-control/index.html">
+<meta property="og:site_name" content="jumpingfrog0">
+<meta property="og:description" content="访问控制（Access Control）Swift中有非常完备的代码访问控制，代码写的好不好，从你的代码访问控制上就可以一眼看出。特别是在开源项目中，接口的设计及其重要，要简单易用，不暴露实现细节，做到可扩展性强，同时又要保证某些私有属性和方法不被使用者调用以避免Bug，这一切都是建立在访问控制的基础上的。设计模式中的开闭原则: 对扩展开发，对修改关闭就很好的诠释了访问控制的意思。
+
+访问控制可以">
+<meta property="og:updated_time" content="2016-12-10T10:51:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift3 访问控制（Access Control）">
+<meta name="twitter:description" content="访问控制（Access Control）Swift中有非常完备的代码访问控制，代码写的好不好，从你的代码访问控制上就可以一眼看出。特别是在开源项目中，接口的设计及其重要，要简单易用，不暴露实现细节，做到可扩展性强，同时又要保证某些私有属性和方法不被使用者调用以避免Bug，这一切都是建立在访问控制的基础上的。设计模式中的开闭原则: 对扩展开发，对修改关闭就很好的诠释了访问控制的意思。
+
+访问控制可以">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Swift3 访问控制（Access Control） | jumpingfrog0 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jumpingfrog0</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '_hsnBCSxyAH__Kvfd1uL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Swift3 访问控制（Access Control）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-09T17:53:49+08:00" content="2016-12-09">
+              2016-12-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/2016-12-09-swift-access-control/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/2016-12-09-swift-access-control/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="访问控制（Access-Control）"><a href="#访问控制（Access-Control）" class="headerlink" title="访问控制（Access Control）"></a>访问控制（Access Control）</h3><p><code>Swift</code>中有非常完备的代码访问控制，代码写的好不好，从你的代码访问控制上就可以一眼看出。特别是在开源项目中，接口的设计及其重要，要简单易用，不暴露实现细节，做到可扩展性强，同时又要保证某些私有属性和方法不被使用者调用以避免Bug，这一切都是建立在访问控制的基础上的。设计模式中的<code>开闭原则: 对扩展开发，对修改关闭</code>就很好的诠释了<code>访问控制</code>的意思。</p>
+<blockquote>
+<p><code>访问控制</code>可以限定你在源代码和模块中访问代码的级别，这个可以让你隐藏代码的实现细节，让你更好的设计一个接口，哪些代码是可以被访问和使用的。</p>
+</blockquote>
+<p>其实这个东西说起来很简单，但在写代码的过程中却很容易被忽略，因为我们的代码经常是只写在一个工程中，工程内的所有代码都可以任意调用，运行起来也没有问题，但如果我们想写成一个开源库提供给别人使用时，这就需要特别重视了，接口设计的好不好，意味着你的开源库是否会被更多的人使用，在<code>GitHub</code>上骗的赞多不多了，手动滑稽~~ :)</p>
+<p>本来想翻译苹果的官方文档的<a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/AccessControl.html" target="_blank" rel="external">Access Control</a>，<br>翻译到一半，觉得内容实在是太多，懒得翻译，后来发现网上已经有人翻译好了，所以就拷贝了很多过来 - _ -  ：<a href="http://www.devtalking.com/articles/swift-access-control/" target="_blank" rel="external">http://www.devtalking.com/articles/swift-access-control/</a></p>
+<h3 id="Modules-和-源文件"><a href="#Modules-和-源文件" class="headerlink" title="Modules 和 源文件"></a>Modules 和 源文件</h3><p><code>Swift</code>的访问控制是基于模块（module）和源文件（source file）这两个概念的。</p>
+<ul>
+<li>模块：指的是<code>framework</code>或<code>app bundle</code>，可以用<code>import</code>关键字引入到其他模块中。</li>
+<li>源文件：就是一个的<code>swift</code>文件，属于某一个模块。</li>
+</ul>
+<h3 id="访问级别"><a href="#访问级别" class="headerlink" title="访问级别"></a>访问级别</h3><p><code>Swift</code>中有5种不同的访问级别，这些访问级别是与被定义在源文件中的实体有关的，也与那些源文件所属的模块有关。</p>
+<ul>
+<li><code>open</code>和<code>public</code>: 可以在所属模块的任意源文件中被访问，也可以在其他模块中被访问，两者的区别下文会介绍。</li>
+<li><code>internal</code>：可以在所属的模块的任意源文件中被访问，但不能在其他模块中被访问。</li>
+<li><code>fileprivate</code>：只能在定义自己的源文件中被访问。</li>
+<li><code>private</code>：只能在封闭的声明块中被访问。</li>
+</ul>
+<p><code>open</code>是最高（限制最少）的访问级别，<code>private</code>是最低（限制最多）的访问级别。</p>
+<p><code>open</code>只能应用于类和类成员，它和<code>public</code>的区别如下：</p>
+<ul>
+<li><code>public</code>级别的类，只能在所属模块中被子类化（被子类继承）</li>
+<li><code>public</code>级别的类成员，只能在所属模块中被重载</li>
+<li><code>open</code>级别的类可以在所属模块和其他模块中被子类化（被子类继承）</li>
+<li><code>open</code>级别的类成员可以在所属模块和其他模块中被重载</li>
+</ul>
+<h4 id="指导原则"><a href="#指导原则" class="headerlink" title="指导原则"></a>指导原则</h4><p>总的来说，<code>访问级别</code>在<code>Swift</code>中遵循以下的指导原则：</p>
+<pre><code>没有实体可以根据具有较低（更严格）访问级别的另一实体来定义。
+</code></pre><p>举例：</p>
+<ul>
+<li>一个<code>public</code>的变量，其类型不能为<code>internal</code>, <code>fileprivate</code>, <code>private</code>访问级别的，因为这个类型在使用该<code>public</code>变量的任何地方都可能不可用，这样会报错。</li>
+<li>一个函数的访问级别不能高于它的参数和返回类型的访问级别，因为这样就可能会出现，函数可以被使用，但它的参数和返回类型却不能被访问，同样会报错。</li>
+</ul>
+<p>在<code>Swift</code>中，如果不显式地指定访问级别，它就会有一个默认的访问级别 <code>internal</code>。</p>
+<p>大多数情况下，我们都不需要显式地指定访问级别，因为我们大多数情况下都是在开发一个应用程序，那些代码不需要提供给其他应用或模块使用，当然，你也可以使用<code>fileprivate</code>或<code>private</code>来隐藏一些功能的实现细节。</p>
+<p>而当你在开发开源库或<code>framework</code>时，就需要把一些实体定义为<code>public</code>或<code>open</code>了。比如你在设计一个类或接口，如果你希望它可以在其他模块中被使用，但在其他模块中又不能被继承时，就定义为<code>public</code>，这时这个类或接口仍可以在你自己的库中被继承，；如果你希望它可以在其他模块中被使用，同时在其他模块中也可以被继承时，就使用<code>open</code>。</p>
+<p>明确地声明一个类为<code>open</code>，意味着你已经充分考虑了这个类在其他模块中被作为父类对代码的影响，并且你已经相应地设计了这个类的代码。</p>
+<h4 id="单元测试（Unit-Test）的访问级别"><a href="#单元测试（Unit-Test）的访问级别" class="headerlink" title="单元测试（Unit Test）的访问级别"></a>单元测试（Unit Test）的访问级别</h4><p>单元测试（Unit Test）在<code>Swift</code>中会被当成其他模块，一般情况下，只有被声明为<code>public</code>或<code>open</code>的实体才能在其他模块中被访问和使用，然而，如果你引用模块时使用了<code>@testable</code>，<code>单元测试</code>可以访问任何<code>internal</code>的实体了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@testable</span> <span class="keyword">import</span> ProductModuleName</div></pre></td></tr></table></figure>
+<h3 id="访问控制语法"><a href="#访问控制语法" class="headerlink" title="访问控制语法"></a>访问控制语法</h3><p>通过修饰符<code>open</code>, <code>public</code>, <code>internal</code>, <code>fileprivate</code>, <code>private</code>来声明实体的访问级别。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SomePublicClass</span> </span>&#123;&#125;</div><div class="line"><span class="keyword">internal</span> <span class="class"><span class="keyword">class</span> <span class="title">SomeInternalClass</span> </span>&#123;&#125;</div><div class="line">fileprivate <span class="class"><span class="keyword">class</span> <span class="title">SomeFilePrivateClass</span> </span>&#123;&#125;</div><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">SomePrivateClass</span> </span>&#123;&#125;</div><div class="line"> </div><div class="line"><span class="keyword">public</span> <span class="keyword">var</span> somePublicVariable = <span class="number">0</span></div><div class="line"><span class="keyword">internal</span> <span class="keyword">let</span> someInternalConstant = <span class="number">0</span></div><div class="line">fileprivate <span class="function"><span class="keyword">func</span> <span class="title">someFilePrivateFunction</span><span class="params">()</span></span> &#123;&#125;</div><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">somePrivateFunction</span><span class="params">()</span></span> &#123;&#125;</div></pre></td></tr></table></figure>
+<p>除非显式地指定，否则默认的访问级别是<code>internal</code>。这意味着<code>SomeInternalClass</code>和<code>someInternalConstant</code>即使没有明确地使用修饰符声明访问级别，仍然有隐式的访问级别<code>internal</code>。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeInternalClass</span> </span>&#123;&#125;              <span class="comment">// implicitly internal</span></div><div class="line"><span class="keyword">let</span> someInternalConstant = <span class="number">0</span>            <span class="comment">// implicitly internal</span></div></pre></td></tr></table></figure>
+<h3 id="访问控制细节"><a href="#访问控制细节" class="headerlink" title="访问控制细节"></a>访问控制细节</h3><h4 id="类（Types）"><a href="#类（Types）" class="headerlink" title="类（Types）"></a>类（Types）</h4><p>类的访问级别影响着类成员（属性、方法、构造函数、下标索引）的默认访问级别。</p>
+<ul>
+<li>如果你定义了一个类的访问级别是<code>private</code>或<code>fileprivate</code>，那么它成员的默认访问级别就是<code>private</code>或<code>fileprivate</code></li>
+<li>如果你定义了一个类的访问级别是<code>internal</code>（或不显式地指定访问级别）或<code>public</code>，那么它成员的默认访问级别就是<code>internal</code></li>
+</ul>
+<blockquote>
+<p><code>public</code>类型的成员默认是<code>internal</code>访问级别，而不是<code>public</code>访问级别。如果你想要声明一个<code>public</code>的类成员，就要显式地使用<code>public</code>修饰符。这能够保证这个类的公共接口API是你明确指定哪些属性和方法是暴露出来的，可以避免将内部使用的属性和方法错误地公开成公共API。</p>
+</blockquote>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SomePublicClass</span> </span>&#123;                  <span class="comment">// explicitly public class</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">var</span> somePublicProperty = <span class="number">0</span>            <span class="comment">// explicitly public class member</span></div><div class="line">    <span class="keyword">var</span> someInternalProperty = <span class="number">0</span>                 <span class="comment">// implicitly internal class member</span></div><div class="line">    fileprivate <span class="function"><span class="keyword">func</span> <span class="title">someFilePrivateMethod</span><span class="params">()</span></span> &#123;&#125;  <span class="comment">// explicitly file-private class member</span></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">somePrivateMethod</span><span class="params">()</span></span> &#123;&#125;          <span class="comment">// explicitly private class member</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeInternalClass</span> </span>&#123;                       <span class="comment">// implicitly internal class</span></div><div class="line">    <span class="keyword">var</span> someInternalProperty = <span class="number">0</span>                 <span class="comment">// implicitly internal class member</span></div><div class="line">    fileprivate <span class="function"><span class="keyword">func</span> <span class="title">someFilePrivateMethod</span><span class="params">()</span></span> &#123;&#125;  <span class="comment">// explicitly file-private class member</span></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">somePrivateMethod</span><span class="params">()</span></span> &#123;&#125;          <span class="comment">// explicitly private class member</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line">fileprivate <span class="class"><span class="keyword">class</span> <span class="title">SomeFilePrivateClass</span> </span>&#123;        <span class="comment">// explicitly file-private class</span></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">someFilePrivateMethod</span><span class="params">()</span></span> &#123;&#125;              <span class="comment">// implicitly file-private class member</span></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">somePrivateMethod</span><span class="params">()</span></span> &#123;&#125;          <span class="comment">// explicitly private class member</span></div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">SomePrivateClass</span> </span>&#123;                <span class="comment">// explicitly private class</span></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">somePrivateMethod</span><span class="params">()</span></span> &#123;&#125;                  <span class="comment">// implicitly private class member</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="元祖（Tuple-Types）"><a href="#元祖（Tuple-Types）" class="headerlink" title="元祖（Tuple Types）"></a>元祖（Tuple Types）</h4><p>元祖的访问级别取决于你在该元祖中定义的所有类型的限制最严的那个访问级别。比如，你定义了一个拥有两种不同类型元素的元祖，一个是<code>internal</code>级别的，另一个是<code>private</code>级别的，那么这个元祖的访问级别就是<code>private</code>。</p>
+<h4 id="函数（Function-Types）"><a href="#函数（Function-Types）" class="headerlink" title="函数（Function Types）"></a>函数（Function Types）</h4><p>函数的访问级别需要根据参数类型和返回值类型中最严的访问级别计算得出。如果计算得出的访问级别不符合上下文，就必须显式地指定访问级别。</p>
+<p>下面的例子中定义了一个全局函数<code>someFunction</code>,并且没有使用修饰符声明访问级别。你也许会认为它的访问级别是<code>internal</code>，但并非如此，事实上将会报错。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">someFunction</span><span class="params">()</span></span> -&gt; (<span class="type">SomeInternalClass</span>, <span class="type">SomePrivateClass</span>) &#123;</div><div class="line">    <span class="comment">// 报错: Function must be declared fileprivate because its result uses a fileprivate type</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为函数的返回值类型的级别是<code>private</code>，所以你必须显式地使用修饰符声明它的访问级别为<code>private</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">someFunction</span><span class="params">()</span></span> -&gt; (<span class="type">SomeInternalClass</span>, <span class="type">SomePrivateClass</span>) &#123;</div><div class="line">    <span class="comment">// function implementation goes here</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>将该函数声明为<code>public</code>或<code>internal</code>或者使用默认的访问级别<code>internal</code>都是错误的，因为如果把该函数当作<code>public</code>或<code>internal</code>级别来使用的话，是无法得到<code>private</code>级别的返回值的。</p>
+<h4 id="枚举（Enumeration-Types）"><a href="#枚举（Enumeration-Types）" class="headerlink" title="枚举（Enumeration Types）"></a>枚举（Enumeration Types）</h4><p>枚举中成员的访问级别与枚举类型的访问级别一致，你不能单独为枚举成员指定访问级别。<br>举个例子，<code>CompassPoint</code>枚举明确地声明为<code>public</code>，因此它的成员<code>north</code>, <code>south</code>, <code>east</code>和<code>west</code>的级别都是<code>public</code>：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">CompassPoint</span> </span>&#123;</div><div class="line">    <span class="keyword">case</span> north</div><div class="line">    <span class="keyword">case</span> south</div><div class="line">    <span class="keyword">case</span> east</div><div class="line">    <span class="keyword">case</span> west</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="嵌套类型（Nested-Types）"><a href="#嵌套类型（Nested-Types）" class="headerlink" title="嵌套类型（Nested Types）"></a>嵌套类型（Nested Types）</h4><ul>
+<li>如果在<code>private</code>级别的类型中定义嵌套类型，那么该嵌套类型就自动拥有<code>private</code>访问级别。</li>
+<li>如果在<code>public</code>或者<code>internal</code>级别的类型中定义嵌套类型，那么该嵌套类型自动拥有<code>internal</code>访问级别。</li>
+<li>如果想让嵌套类型拥有<code>public</code>访问级别，那么需要对该嵌套类型进行明确的访问级别声明。</li>
+</ul>
+<h4 id="子类（Subclassing）"><a href="#子类（Subclassing）" class="headerlink" title="子类（Subclassing）"></a>子类（Subclassing）</h4><p>子类的访问级别不能高于父类的访问级别。<br>比如，父类的访问级别是<code>internal</code>，你就不能定义一个访问级别为<code>public</code>的子类。</p>
+<p>此外，在满足子类不高于父类访问级别以及遵循各访问级别作用域（即模块或源文件）的前提下，你可以重写任意类成员（方法、属性、初始化方法、下标索引等）。</p>
+<p>如果我们无法直接访问某个类中的属性或方法，那么可以继承该类，并重载相应地属性或方法，这样可以使我们更容易地访问该类的类成员。比如，<code>public</code>级别的类A有一个<code>fileprivate</code>级别的方法<code>someMethod</code>，类B是A的子类，访问级别是<code>internal</code>，但是类B重载了<code>someMethod</code>方法，并声明为<code>inernal</code>级别，这样<code>someMethod</code>就拥有比原来的实现更高的访问级别了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</div><div class="line">    fileprivate <span class="function"><span class="keyword">func</span> <span class="title">someMethod</span><span class="params">()</span></span> &#123;&#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="keyword">internal</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span>: <span class="title">A</span> </span>&#123;</div><div class="line">    <span class="keyword">override</span> <span class="keyword">internal</span> <span class="function"><span class="keyword">func</span> <span class="title">someMethod</span><span class="params">()</span></span> &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>只要满足子类不高于父类访问级别以及遵循各访问级别作用域的前提下（即父类的<code>fileprivate</code>成员的作用域在同一个源文件中，子类的<code>internal</code>成员的作用域在同一个模块下），我们甚至可以在子类中，用子类成员访问父类成员，哪怕父类成员的访问级别比子类成员的要低：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</div><div class="line">    fileprivate <span class="function"><span class="keyword">func</span> <span class="title">someMethod</span><span class="params">()</span></span> &#123;&#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="keyword">internal</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span>: <span class="title">A</span> </span>&#123;</div><div class="line">    <span class="keyword">override</span> <span class="keyword">internal</span> <span class="function"><span class="keyword">func</span> <span class="title">someMethod</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.someMethod()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为父类A和子类B定义在同一个源文件中，所以在类B中可以在重写的<code>someMethod</code>方法中调用<code>super.someMethod()</code>。</p>
+<h4 id="Getters-和-Setters"><a href="#Getters-和-Setters" class="headerlink" title="Getters 和 Setters"></a>Getters 和 Setters</h4><p>常量、变量、属性、下标索引的<code>Getters</code>和<code>Setters</code>的访问级别继承自它们所属成员的访问级别。</p>
+<p><code>Setter</code>的访问级别可以低于对应的<code>Getter</code>的访问级别，这样就可以控制变量、属性或下标索引的读写权限。在<em>var</em>或<em>subscript</em>定义作用域之前，你可以通过<code>fileprivate</code>, <code>private(set)</code>或<code>internal(set)</code>先为它门的写权限申明一个较低的访问级别。</p>
+<blockquote>
+<p>注意：这个规定适用于用作存储的属性或用作计算的属性。即使你不明确的申明存储属性的<code>Getter</code>, <code>Setter</code>，<code>Swift</code>也会隐式的为其创建<code>Getter</code>和<code>Setter</code>，用于对该属性进行读取操作。使用<code>fileprivate(set)</code>, <code>private(set)</code>和<code>internal(set)</code>可以改变<code>Swift</code>隐式创建的<code>Setter</code>的访问级别。在计算属性中也是同样的。</p>
+</blockquote>
+<p>下面的例子中定义了一个结构体名为<code>TrackedString</code>，它记录了<em>value</em>属性被修改的次数：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TrackedString</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span>(<span class="keyword">set</span>) <span class="keyword">var</span> numberOfEdits = <span class="number">0</span></div><div class="line">    <span class="keyword">var</span> value: <span class="type">String</span> = <span class="string">""</span> &#123;</div><div class="line">    <span class="keyword">didSet</span> &#123;</div><div class="line">        numberOfEdits++</div><div class="line">    &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>TrackedString</code>结构体定义了一个用于存储的属性名为<em>value</em>，类型为<code>String</code>，并将初始化值设为””（即一个空字符串）。该结构体同时也定义了另一个用于存储的属性名为<em>numberOfEdits</em>，类型为<code>Int</code>，它用于记录属性<em>value</em>被修改的次数。这个功能的实现通过属性<em>value</em>的<code>didSet</code>方法实现，每当给<em>value</em>赋新值时就会调用<code>didSet</code>方法，给<em>numberOfEdits</em>加一。</p>
+<p>结构体<code>TrackedString</code>和它的属性<em>value</em>均没有明确的申明访问级别，所以它们都拥有默认的访问级别<code>internal</code>。但是该结构体的<em>numberOfEdits</em>属性使用<code>private(set)</code>修饰符进行申明，这意味着<em>numberOfEdits</em>属性只能在定义该结构体的源文件中赋值。<em>numberOfEdits</em>属性的<code>Getter</code>依然是默认的访问级别<code>internal</code>，但是<code>Setter</code>的访问级别是<code>private</code>，这表示该属性只有在当前的源文件中是可读可写的，在当前源文件所属的模块中它只是一个可读的属性。</p>
+<p>如果你实例化<code>TrackedString</code>结构体，并且多次对<em>value</em>属性的值进行修改，你就会看到<em>numberOfEdits</em>的值会随着修改次数更改：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> stringToEdit = <span class="type">TrackedString</span>()</div><div class="line">stringToEdit.value = <span class="string">"This string will be tracked."</span></div><div class="line">stringToEdit.value += <span class="string">" This edit will increment numberOfEdits."</span></div><div class="line">stringToEdit.value += <span class="string">" So will this one."</span></div><div class="line"><span class="built_in">println</span>(<span class="string">"The number of edits is <span class="subst">\(stringToEdit.numberOfEdits)</span>"</span>)</div><div class="line"><span class="comment">// prints "The number of edits is 3"</span></div></pre></td></tr></table></figure>
+<p>虽然你可以在其他的源文件中实例化该结构体并且获取到<em>numberOfEdits</em>属性的值，但是你不能对其进行赋值。这样就能很好的告诉使用者，你只管使用，而不需要知道其实现细节。</p>
+<h4 id="初始化（Initializers）"><a href="#初始化（Initializers）" class="headerlink" title="初始化（Initializers）"></a>初始化（Initializers）</h4><p>我们可以给自定义的初始化方法指定访问级别，但是必须要低于或等于它所属类的访问级别。但如果该初始化方法是必须要使用的话，那它的访问级别就必须和所属类的访问级别相同。</p>
+<p>如同函数或方法参数，初始化方法参数的访问级别也不能低于初始化方法的访问级别。</p>
+<h5 id="默认初始化方法"><a href="#默认初始化方法" class="headerlink" title="默认初始化方法"></a>默认初始化方法</h5><p><code>Swift</code>为结构体、类都提供了一个默认的无参初始化方法，用于给它们的所有属性提供赋值操作，但不会给出具体值。默认初始化方法的访问级别与所属类型的访问级别相同。</p>
+<blockquote>
+<p>注意：如果一个类型被声明为<code>public</code>级别，那么默认的初始化方法的访问级别为<code>internal</code>。如果你想让无参的初始化方法在其他模块中可以被使用，那么你必须提供一个具有<code>public</code>访问级别的无参初始化方法。</p>
+</blockquote>
+<h5 id="结构体的默认成员初始化方法"><a href="#结构体的默认成员初始化方法" class="headerlink" title="结构体的默认成员初始化方法"></a>结构体的默认成员初始化方法</h5><p>如果结构体中的任一存储属性的访问级别为<code>private</code>，那么它的默认成员初始化方法访问级别就是<code>private</code>。尽管如此，结构体的初始化方法的访问级别依然是<code>internal</code>。</p>
+<p>如果你想在其他模块中使用该结构体的默认成员初始化方法，那么你需要提供一个访问级别为<code>public</code>的默认成员初始化方法。</p>
+<h4 id="协议（Protocols）"><a href="#协议（Protocols）" class="headerlink" title="协议（Protocols）"></a>协议（Protocols）</h4><p>如果你想为一个协议明确的声明访问级别，那么有一点需要注意，就是你要确保该协议只在你声明的访问级别作用域中使用。</p>
+<p>协议中的每一个必须要实现的函数都具有和该协议相同的访问级别。这样才能确保该协议的使用者可以实现它所提供的函数。</p>
+<blockquote>
+<p>注意：如果你定义了一个<code>public</code>访问级别的协议，那么实现该协议提供的必要函数也会是<code>public</code>的访问级别。这一点不同于其他类型，比如，<code>public</code>访问级别的其他类型，他们成员的访问级别为<code>internal</code>。</p>
+</blockquote>
+<h5 id="协议继承"><a href="#协议继承" class="headerlink" title="协议继承"></a>协议继承</h5><p>如果定义了一个新的协议，并且该协议继承了一个已知的协议，那么新协议拥有的访问级别最高也只和被继承协议的访问级别相同。比如说，你不能定义一个public的协议而去继承一个internal的协议。</p>
+<h5 id="协议一致性"><a href="#协议一致性" class="headerlink" title="协议一致性"></a>协议一致性</h5><p>类可以采用比自身访问级别低的协议。比如说，你可以定义一个<code>public</code>级别的类，可以让它在其他模块中使用，同时它也可以采用一个<code>internal</code>级别的协议，并且只能在定义了该协议的模块中使用。</p>
+<p>采用了协议的类的访问级别遵循它本身和采用协议中最低的访问级别。也就是说如果一个类是<code>public</code>级别，采用的协议是<code>internal</code>级别，那个采用了这个协议后，该类的访问级别也是<code>internal</code>。</p>
+<p>如果你采用了协议，那么实现了协议必须的方法后，该方法的访问级别遵循协议的访问级别。比如说，一个<code>public</code>级别的类，采用了<code>internal</code>级别的协议，那么该类实现协议的方法至少也得是<code>internal</code>。</p>
+<h4 id="扩展（Extensions）"><a href="#扩展（Extensions）" class="headerlink" title="扩展（Extensions）"></a>扩展（Extensions）</h4><p>扩展成员的默认级别和被你扩展的类型中原始成员的默认访问级别一致。</p>
+<ul>
+<li>如果你扩展了一个<code>public</code>或<code>internal</code>的类型，任何新扩展成员的默认访问级别都是<code>internal</code></li>
+<li>如果你扩展了一个<code>fileprivate</code>的类型，任何新扩展成员的默认访问级别都是<code>fileprivate</code></li>
+<li>如果你扩展了一个<code>private</code>的类型，任何新扩展成员的默认访问级别都是<code>private</code></li>
+</ul>
+<p>当然，你也可以明确地声明扩展的访问级别（比如, <code>private extension</code>）给该扩展内所有成员指定一个新的默认访问级别。这个新的默认访问级别仍然可以被单独成员所指定的访问级别所覆盖。</p>
+<h5 id="协议的扩展"><a href="#协议的扩展" class="headerlink" title="协议的扩展"></a>协议的扩展</h5><p>如果一个扩展采用了某个协议，那么你就不能对该扩展使用访问级别修饰符来声明了。该扩展中实现协议的方法都会遵循该协议的访问级别。</p>
+<h4 id="泛型（Generics）"><a href="#泛型（Generics）" class="headerlink" title="泛型（Generics）"></a>泛型（Generics）</h4><p>泛型类型或泛型函数的访问级别遵循泛型类型、函数本身、泛型类型参数三者中访问级别最低的级别。</p>
+<h4 id="别名（Type-Aliases）"><a href="#别名（Type-Aliases）" class="headerlink" title="别名（Type Aliases）"></a>别名（Type Aliases）</h4><p>任何被你定义的类型别名都会被当作不同的类型来进行访问控制。一个类型别名的访问级别低于或等于这个类型的访问级别。比如说，一个<code>private</code>级别的类型别名可以设定一个<code>private</code>、<code>fileprivate</code>、<code>inernal</code>、<code>public</code>、或<code>open</code>的类型，但是一个<code>public</code>级别的类型别名不能设定<code>internal</code>、<code>fileprivate</code>或<code>private</code>的类型。</p>
+<blockquote>
+<p>注意：这条规则也适用于为满足协议一致性而给相关类型命名别名。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/2016-03-26-establish-static-blog-with-hexo/" rel="next" title="使用Hexo搭建静态博客">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建静态博客
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/2016-12-09-swift-access-control/"
+           data-title="Swift3 访问控制（Access Control）" data-url="http://jumpingfrog0.com/2016/2016-12-09-swift-access-control/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/minion.jpeg"
+               alt="jumpingfrog0" />
+          <p class="site-author-name" itemprop="name">jumpingfrog0</p>
+          <p class="site-description motion-element" itemprop="description">Know a lot about a little, know a little about a lot</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jumpingfrog0" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3290250165/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-dong-hong" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/704851a93179/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问控制（Access-Control）"><span class="nav-number">1.</span> <span class="nav-text">访问控制（Access Control）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modules-和-源文件"><span class="nav-number">2.</span> <span class="nav-text">Modules 和 源文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问级别"><span class="nav-number">3.</span> <span class="nav-text">访问级别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#指导原则"><span class="nav-number">3.1.</span> <span class="nav-text">指导原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单元测试（Unit-Test）的访问级别"><span class="nav-number">3.2.</span> <span class="nav-text">单元测试（Unit Test）的访问级别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问控制语法"><span class="nav-number">4.</span> <span class="nav-text">访问控制语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问控制细节"><span class="nav-number">5.</span> <span class="nav-text">访问控制细节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类（Types）"><span class="nav-number">5.1.</span> <span class="nav-text">类（Types）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#元祖（Tuple-Types）"><span class="nav-number">5.2.</span> <span class="nav-text">元祖（Tuple Types）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数（Function-Types）"><span class="nav-number">5.3.</span> <span class="nav-text">函数（Function Types）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#枚举（Enumeration-Types）"><span class="nav-number">5.4.</span> <span class="nav-text">枚举（Enumeration Types）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#嵌套类型（Nested-Types）"><span class="nav-number">5.5.</span> <span class="nav-text">嵌套类型（Nested Types）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子类（Subclassing）"><span class="nav-number">5.6.</span> <span class="nav-text">子类（Subclassing）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Getters-和-Setters"><span class="nav-number">5.7.</span> <span class="nav-text">Getters 和 Setters</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化（Initializers）"><span class="nav-number">5.8.</span> <span class="nav-text">初始化（Initializers）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#默认初始化方法"><span class="nav-number">5.8.1.</span> <span class="nav-text">默认初始化方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结构体的默认成员初始化方法"><span class="nav-number">5.8.2.</span> <span class="nav-text">结构体的默认成员初始化方法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协议（Protocols）"><span class="nav-number">5.9.</span> <span class="nav-text">协议（Protocols）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#协议继承"><span class="nav-number">5.9.1.</span> <span class="nav-text">协议继承</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#协议一致性"><span class="nav-number">5.9.2.</span> <span class="nav-text">协议一致性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展（Extensions）"><span class="nav-number">5.10.</span> <span class="nav-text">扩展（Extensions）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#协议的扩展"><span class="nav-number">5.10.1.</span> <span class="nav-text">协议的扩展</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#泛型（Generics）"><span class="nav-number">5.11.</span> <span class="nav-text">泛型（Generics）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#别名（Type-Aliases）"><span class="nav-number">5.12.</span> <span class="nav-text">别名（Type Aliases）</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jumpingfrog0</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jumpingfrog0"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
