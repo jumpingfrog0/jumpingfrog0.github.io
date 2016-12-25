@@ -68,7 +68,7 @@
 <meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/Device_Orientation.png">
 <meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/Device_Orientation_only_portrait.png">
 <meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/Device_Orientation.png">
-<meta property="og:updated_time" content="2016-12-25T13:01:24.000Z">
+<meta property="og:updated_time" content="2016-12-25T13:15:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 填坑系列 - 横竖屏切换">
 <meta name="twitter:description" content="概述写代码就是在不断填坑的过程中慢慢成长，程序员哪有不遇坑的呢？
@@ -311,7 +311,7 @@
 <p>注意：</p>
 <p>这里有一个坑，在 iOS 9 以后，横屏时状态栏会隐藏，如果想要显示状态栏，需要手动控制。</p>
 <p>在 <code>Info.plist</code> 中 设置 <code>View controller-based status bar appearance</code> 值为 <code>YES</code>，在 view controller 中重写 <code>prefersStatusBarHidden</code> 返回 <code>false</code></p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">override</span> <span class="keyword">var</span> prefersStatusBarHidden: <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">&#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="keyword">var</span> prefersStatusBarHidden: <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </blockquote>
 <h2 id="特殊情形"><a href="#特殊情形" class="headerlink" title="特殊情形"></a>特殊情形</h2><h3 id="只有一个（或几个）界面固定方向，其他界面支持横竖屏切换"><a href="#只有一个（或几个）界面固定方向，其他界面支持横竖屏切换" class="headerlink" title="只有一个（或几个）界面固定方向，其他界面支持横竖屏切换"></a>只有一个（或几个）界面固定方向，其他界面支持横竖屏切换</h3><p>其实这种情况一般比较少见，在【General】–&gt;【Deployment Info】–&gt;【Device Orientation】勾选希望支持的方向，然后在需要固定方向的视图控制器中实现如下两个方法即可。</p>
 <figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">override</span> <span class="keyword">var</span> shouldAutorotate: <span class="type">Bool</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">&#125;</div><div class="line">    </div><div class="line"><span class="keyword">override</span> <span class="keyword">var</span> supportedInterfaceOrientations: <span class="type">UIInterfaceOrientationMask</span> &#123;</div><div class="line">    <span class="keyword">return</span> .landscape</div><div class="line">&#125;</div></pre></td></tr></table></figure>
