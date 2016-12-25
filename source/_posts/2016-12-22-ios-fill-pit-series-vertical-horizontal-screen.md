@@ -35,10 +35,10 @@ tags: iOS
 > 在 `Info.plist` 中 设置 `View controller-based status bar appearance` 值为 `YES`，在 view controller 中重写 `prefersStatusBarHidden` 返回 `false`
 > 
 > ```swift
-> override var prefersStatusBarHidden: Bool {
+override var prefersStatusBarHidden: Bool {
     return false
 }
-> ```
+```
 
 ## 特殊情形
 
