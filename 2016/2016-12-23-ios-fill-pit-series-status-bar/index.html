@@ -57,32 +57,17 @@
 
 
 
-<meta name="description" content="思路：
-
-childViewControllerForStatusBarHidden 控制隐藏
-view 中改变状态栏
-
-概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7">
+<meta name="description" content="概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7 到 iOS 10开发者，在这方面也一直被困扰着，一直不知道到底哪种方式才是正确的，每次都要试一试才敢确定。踩了太多坑，于">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS 填坑系列 - 状态栏变化">
 <meta property="og:url" content="http://jumpingfrog0.com/2016/2016-12-23-ios-fill-pit-series-status-bar/index.html">
 <meta property="og:site_name" content="jumpingfrog0">
-<meta property="og:description" content="思路：
-
-childViewControllerForStatusBarHidden 控制隐藏
-view 中改变状态栏
-
-概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7">
+<meta property="og:description" content="概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7 到 iOS 10开发者，在这方面也一直被困扰着，一直不知道到底哪种方式才是正确的，每次都要试一试才敢确定。踩了太多坑，于">
 <meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/status_bar_style.png">
-<meta property="og:updated_time" content="2016-12-27T12:04:09.000Z">
+<meta property="og:updated_time" content="2016-12-27T12:05:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 填坑系列 - 状态栏变化">
-<meta name="twitter:description" content="思路：
-
-childViewControllerForStatusBarHidden 控制隐藏
-view 中改变状态栏
-
-概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7">
+<meta name="twitter:description" content="概述相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7 到 iOS 10开发者，在这方面也一直被困扰着，一直不知道到底哪种方式才是正确的，每次都要试一试才敢确定。踩了太多坑，于">
 <meta name="twitter:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/status_bar_style.png">
 
 
@@ -307,12 +292,7 @@ view 中改变状态栏
       
 
       
-        <p>思路：</p>
-<ol>
-<li>childViewControllerForStatusBarHidden 控制隐藏</li>
-<li>view 中改变状态栏</li>
-</ol>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7 到 iOS 10开发者，在这方面也一直被困扰着，一直不知道到底哪种方式才是正确的，每次都要试一试才敢确定。踩了太多坑，于是在这里总结一下吧。</p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>相信很多iOS开发者都做过改变状态栏样式和隐藏状态栏，这个功能也挺简单的，但应该也有不少人踩过其中的坑。苹果特别喜欢动不动就改，每个版本都不一样，这个方法这个版本好好的，下个版本就非得用另外一种方式实现才行。而苹果对于状态栏修改的方式一直折腾不休，作为一个经历了从iOS 7 到 iOS 10开发者，在这方面也一直被困扰着，一直不知道到底哪种方式才是正确的，每次都要试一试才敢确定。踩了太多坑，于是在这里总结一下吧。</p>
 <blockquote>
 <p>本文是基于 iOS 10的，有些方面对比了 iOS 9 和 iOS 10 的异同，其他不同版本请Google。</p>
 </blockquote>
