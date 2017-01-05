@@ -57,44 +57,16 @@
 
 
 
-<meta name="description" content="Xcode 卡住在 ‘Verifying Xcode…’界面更新完 Xcode 或安装多个 Xcode后，第一次打开有时会卡住在 “Verifying Xcode…”界面
-
-解决办法是：
-12$ cd /Applications$ xattr -d com.apple.quarantine Xcode.app
-打印调试LogiOS 中有 Debug 和 Release 两种版本。
-
-Debug：平">
+<meta name="description" content="待更新…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS奇淫技巧总结">
+<meta property="og:title" content="OS lldb调试技巧">
 <meta property="og:url" content="http://jumpingfrog0.com/2017/2017-01-05-iOS lldb调试技巧/index.html">
 <meta property="og:site_name" content="jumpingfrog0">
-<meta property="og:description" content="Xcode 卡住在 ‘Verifying Xcode…’界面更新完 Xcode 或安装多个 Xcode后，第一次打开有时会卡住在 “Verifying Xcode…”界面
-
-解决办法是：
-12$ cd /Applications$ xattr -d com.apple.quarantine Xcode.app
-打印调试LogiOS 中有 Debug 和 Release 两种版本。
-
-Debug：平">
-<meta property="og:image" content="https://i.stack.imgur.com/XtGsR.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/Other_Swift_Flags.png">
-<meta property="og:image" content="https://i.stack.imgur.com/0a7FV.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/todo_fixme_code_piece.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/todo_fixme_highlight.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/swift_xcode_warning_script.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/xcode_todo_fixme_warning.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/deprecated_method.png">
-<meta property="og:image" content="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/deprecated_message.png">
-<meta property="og:updated_time" content="2017-01-05T11:24:43.000Z">
+<meta property="og:description" content="待更新…">
+<meta property="og:updated_time" content="2017-01-05T11:47:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS奇淫技巧总结">
-<meta name="twitter:description" content="Xcode 卡住在 ‘Verifying Xcode…’界面更新完 Xcode 或安装多个 Xcode后，第一次打开有时会卡住在 “Verifying Xcode…”界面
-
-解决办法是：
-12$ cd /Applications$ xattr -d com.apple.quarantine Xcode.app
-打印调试LogiOS 中有 Debug 和 Release 两种版本。
-
-Debug：平">
-<meta name="twitter:image" content="https://i.stack.imgur.com/XtGsR.png">
+<meta name="twitter:title" content="OS lldb调试技巧">
+<meta name="twitter:description" content="待更新…">
 
 
 
@@ -112,7 +84,7 @@ Debug：平">
   };
 </script>
 
-  <title> iOS奇淫技巧总结 | jumpingfrog0 </title>
+  <title> OS lldb调试技巧 | jumpingfrog0 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -272,7 +244,7 @@ Debug：平">
             
             
               
-                iOS奇淫技巧总结
+                OS lldb调试技巧
               
             
           </h1>
@@ -284,8 +256,8 @@ Debug：平">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-04T00:00:00+08:00" content="2017-01-04">
-              2017-01-04
+            <time itemprop="dateCreated" datetime="2017-01-05T00:00:00+08:00" content="2017-01-05">
+              2017-01-05
             </time>
           </span>
 
@@ -318,83 +290,7 @@ Debug：平">
       
 
       
-        <h2 id="Xcode-卡住在-‘Verifying-Xcode…’界面"><a href="#Xcode-卡住在-‘Verifying-Xcode…’界面" class="headerlink" title="Xcode 卡住在 ‘Verifying Xcode…’界面"></a>Xcode 卡住在 ‘Verifying Xcode…’界面</h2><p>更新完 Xcode 或安装多个 Xcode后，第一次打开有时会卡住在 “Verifying Xcode…”界面</p>
-<p><img src="https://i.stack.imgur.com/XtGsR.png" alt=""></p>
-<p>解决办法是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /Applications</div><div class="line">$ xattr -d com.apple.quarantine Xcode.app</div></pre></td></tr></table></figure>
-<h2 id="打印调试Log"><a href="#打印调试Log" class="headerlink" title="打印调试Log"></a>打印调试Log</h2><p>iOS 中有 <strong>Debug</strong> 和 <strong>Release</strong> 两种版本。</p>
-<ul>
-<li>Debug：平时调试代码时使用的版本，体积大，支持设置断点调试，一般我们会在终端中打印一些调试信息等。</li>
-<li>Release：正式发布的版本，不包含任何调试信息，体积小，运行速度快。</li>
-</ul>
-<p>为了方便调试，一般情况下我们都会打印一些调试信息的 <em>Log</em> ，但是打印 <em>Log</em> 会影响执行速度，所以一般只在 <em>Debug</em> 版本打印 <em>Log</em>，而 <em>Release</em> 版本则不输出<em>Log</em>。</p>
-<p>代码这么多，难道每次发布前，都要一行一行的注释掉所有的调试信息吗？当然不是，这样太傻逼了。</p>
-<p>iOS 中有一个宏定义 <code>DEBUG</code> 标志是否是 <em>Debug</em> 模式，因此我们可以控制只在 <em>Debug</em> 模式下才打印 <em>Log</em></p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#<span class="keyword">if</span> <span class="type">DEBUG</span></div><div class="line">    <span class="built_in">print</span>(<span class="string">"debug log"</span>)</div><div class="line">#<span class="keyword">else</span></div><div class="line">    <span class="comment">// do nothing</span></div><div class="line">#endif</div></pre></td></tr></table></figure>
-<p>我封装了一个方法打印更多详细的信息。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">jf_print</span>&lt;T&gt;<span class="params">(<span class="number">_</span> items: T, <span class="number">_</span> file: String = #file, <span class="number">_</span> function: String = #function, <span class="number">_</span> line: Int = #line)</span></span></div><div class="line">&#123;</div><div class="line">    #<span class="keyword">if</span> <span class="type">DEBUG</span></div><div class="line">        <span class="keyword">let</span> now = <span class="type">Date</span>().<span class="built_in">toString</span>(<span class="string">"yyyy-MM-dd HH:mm:ss:SSS"</span>)</div><div class="line">        <span class="keyword">let</span> bundleName = <span class="type">Bundle</span>.main.bundleName</div><div class="line">        <span class="keyword">let</span> filename = file.<span class="built_in">split</span>(separator: <span class="string">"/"</span>).last</div><div class="line">        <span class="built_in">print</span>(<span class="string">"<span class="subst">\(now)</span> [<span class="subst">\(bundleName!)</span>] <span class="subst">\(filename!)</span>(<span class="subst">\(line)</span>) <span class="subst">\(function)</span> : <span class="subst">\(items)</span>"</span>)</div><div class="line">    #endif</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然而，Swift 项目中默认是不支持的，解决方法如下：</p>
-<ul>
-<li>在【Build Settings】中搜索 “Other Swift Flags”</li>
-<li>在 <em>Debug</em> 分组添加 <code>&quot;-D&quot; DEBUG</code></li>
-<li>在 <em>Release</em> 分组添加 <code>&quot;-D&quot; RELEASE</code></li>
-</ul>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/Other_Swift_Flags.png" alt=""></p>
-<h2 id="Swift桥接文件-import-file-not-found的问题"><a href="#Swift桥接文件-import-file-not-found的问题" class="headerlink" title="Swift桥接文件 import \ file not found的问题"></a>Swift桥接文件 import \<xx xx.h=""> file not found的问题</xx></h2><p>Objective-C 和 Swift 混编时需要在桥接文件<code>xxx-Bridging-Header.h</code>中引入相关的头文件，但头文件的命名只能是字母，不能出现其他字符。</p>
-<p>比如想引入：<code>UITableView+FDTemplateLayoutCell</code></p>
-<p>不能直接这样写：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &lt;UITableView-FDTemplateLayoutCell/UITableView+FDTemplateLayoutCell.h&gt;</div></pre></td></tr></table></figure>
-<p>会提示错误 <code>file not found</code></p>
-<p>解决方法：</p>
-<p>点击 【pods】–&gt;【targets】–&gt;【build settings】，搜索 “Packaging”，找到 “Product Name”，发现是 <code>UITableView_FDTemplateLayoutCell</code></p>
-<p>在桥接文件中改为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &lt;UITableView_FDTemplateLayoutCell/UITableView+FDTemplateLayoutCell.h&gt;</div></pre></td></tr></table></figure>
-<p>即可。</p>
-<p>如果你用的是 <strong>cocopods 1.1.1或以上</strong> 和 <strong>Xcode 8</strong>，不用在桥接文件中引入，直接在需要用到的地方</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> UITableView_FDTemplateLayoutCell</div></pre></td></tr></table></figure>
-<p>即可。</p>
-<h2 id="Swift中的编译器警告"><a href="#Swift中的编译器警告" class="headerlink" title="Swift中的编译器警告"></a>Swift中的编译器警告</h2><p>在 Objective-C 中使用 <code>#warning</code> 就可以让编译器显示警告信息，提示我们一些糟糕的代码有待修改，方便定位代码位置。</p>
-<p><img src="https://i.stack.imgur.com/0a7FV.png" alt=""></p>
-<p>但 Swift 中并没有实现该编译器特性，虽然有 <code>TODO:</code> <code>FIXME:</code> 等关键字，但仅仅是在 <em>jumping bar</em> 上有高亮提示，并没有警告信息。</p>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/todo_fixme_code_piece.png" alt=""></p>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/todo_fixme_highlight.png" alt=""></p>
-<p>解决方法如下：</p>
-<ul>
-<li>【项目设置】–&gt;【targets】–&gt;【Build Phases】–&gt; ‘+’ –&gt; 【New Run Script Phase】</li>
-<li>把下面的代码粘贴到 【shell】中</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">if [ &quot;$&#123;CONFIGURATION&#125;&quot; = &quot;Debug&quot; ]; then</div><div class="line">TAGS=&quot;TODO:|FIXME:&quot;</div><div class="line">echo &quot;searching $&#123;SRCROOT&#125; for $&#123;TAGS&#125;&quot;</div><div class="line">find &quot;$&#123;SRCROOT&#125;&quot; \( -name &quot;*.swift&quot; \) -print0 | xargs -0 egrep --with-filename --line-number --only-matching &quot;($TAGS).*\$&quot; | perl -p -e &quot;s/($TAGS)/ warning: \$1/&quot;</div><div class="line">fi</div></pre></td></tr></table></figure>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/swift_xcode_warning_script.png" alt=""></p>
-<blockquote>
-<p>你也可以使用 “Release” 替换 “Debug” 只在正式的编译版本中显示警告信息</p>
-</blockquote>
-<p>重新编译就能在 <em>Xcode</em> 的侧边栏看到警告信息了。</p>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/xcode_todo_fixme_warning.png" alt=""></p>
-<h2 id="消除弃用API的编译器警告"><a href="#消除弃用API的编译器警告" class="headerlink" title="消除弃用API的编译器警告"></a>消除弃用API的编译器警告</h2><p>在 Objective-C 中，有些警告不可避免，比如为了兼容旧版本，使用了弃用的API，但看着一大堆的警告又特别烦人，可以使用 <code>#pragma clang diagnostic</code> 消除编译器警告。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#pragma clang diagnostic push</div><div class="line">#pragma clang diagnostic ignored &quot;-Wdeprecated-declarations&quot;</div><div class="line">	// some deprecated code</div><div class="line">    ...</div><div class="line">#pragma clang diagnostic pop</div></pre></td></tr></table></figure>
-<p>Swift3.0 中则可以使用 <code>#available</code> 来检测API是否可用。参考 <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/ControlFlow.html#//apple_ref/doc/uid/TP40014097-CH9-ID523" target="_blank" rel="external">The Swift Programming Language</a></p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> #available(iOS <span class="number">10</span>, macOS <span class="number">10.12</span>, *) &#123;</div><div class="line">    <span class="comment">// Use iOS 10 APIs on iOS, and use macOS 10.12 APIs on macOS</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// Fall back to earlier iOS and macOS APIs</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="标记一个function-method为弃用"><a href="#标记一个function-method为弃用" class="headerlink" title="标记一个function/method为弃用"></a>标记一个function/method为弃用</h2><p>随着版本迭代，某些方法会被弃用。</p>
-<p>直接删掉?万一下次用到怎么办？</p>
-<p>注释掉？强迫症不喜欢看到大段的注释代码。</p>
-<p>Swift 和 Objective-C 提供了一种弃用 <em>function/method</em> 的方法。</p>
-<h4 id="Swift版本"><a href="#Swift版本" class="headerlink" title="Swift版本"></a>Swift版本</h4><p>Swift 中弃用某个方法使用的是 <code>@available</code> <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/Attributes.html" target="_blank" rel="external">attribute</a></p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@available</span>(*, introduced: <span class="number">2.0</span>, deprecated: <span class="number">9.0</span>, message: <span class="string">"no longer needed."</span>)</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">method</span><span class="params">()</span></span> &#123;</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>效果如下：</p>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/deprecated_method.png" alt=""></p>
-<p><img src="http://jumpingfrog0-images.oss-cn-shenzhen.aliyuncs.com/deprecated_message.png" alt=""></p>
-<h4 id="Objective-C-GCC版本"><a href="#Objective-C-GCC版本" class="headerlink" title="Objective-C/GCC版本"></a>Objective-C/GCC版本</h4><p><code>__attribute__((deprecated))</code>是 <a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-g_t_0040code_007bdeprecated_007d-function-attribute-3214" target="_blank" rel="external">gcc</a> 用来标记 <em>function/method</em> 弃用的方式（同样适用于 <a href="http://clang.llvm.org/docs/AttributeReference.html#deprecated-gnu-deprecated" target="_blank" rel="external">clang</a>)</p>
-<h5 id="普通函数的语法"><a href="#普通函数的语法" class="headerlink" title="普通函数的语法"></a>普通函数的语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">__attribute__((deprecated))</div><div class="line">void f(...) &#123;</div><div class="line">  ...</div><div class="line">&#125;</div><div class="line"></div><div class="line">// gcc 4.5+ / clang</div><div class="line">__attribute__((deprecated(&quot;g has been deprecated please use g2 instead&quot;)))</div><div class="line">void g(...) &#123;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="Objective-C的语法"><a href="#Objective-C的语法" class="headerlink" title="Objective-C的语法"></a>Objective-C的语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 弃用一个方法</div><div class="line">@interface MyClass : NSObject &#123; ... &#125;</div><div class="line">-(void)f:(id)x __attribute__((deprecated));</div><div class="line">...</div><div class="line">@end</div><div class="line"></div><div class="line">// 弃用一个类</div><div class="line">__attribute__((deprecated))</div><div class="line">@interface DeprecatedClass : NSObject &#123; ... &#125;</div><div class="line">...</div><div class="line">@end</div></pre></td></tr></table></figure>
-<p>当然你也可以使用更具有可读性的 <code>DEPRECATED_ATTRIBUTE</code></p>
-<p>在<code>usr/include/AvailabilityMacros.h</code>，苹果定义了两个宏</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#define DEPRECATED_ATTRIBUTE        __attribute__((deprecated))</div><div class="line">#define DEPRECATED_MSG_ATTRIBUTE(msg) __attribute((deprecated((msg))))</div></pre></td></tr></table></figure>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// 弃用一个方法</div><div class="line">@interface MyClass : NSObject &#123; ... &#125;</div><div class="line">-(void)foo:(id)x DEPRECATED_ATTRIBUTE;</div><div class="line"></div><div class="line">// 弃用一个方法，并指定一个提示信息</div><div class="line">-(void)bar:(id)x DEPRECATED_MSG_ATTRIBUTE(&quot;Use baz: method instead.&quot;);</div><div class="line">...</div><div class="line">@end</div><div class="line"></div><div class="line">// 弃用一个类</div><div class="line">DEPRECATED_ATTRIBUTE</div><div class="line">@interface DeprecatedClass : NSObject &#123; ... &#125;</div><div class="line">...</div><div class="line">@end</div></pre></td></tr></table></figure>
-<hr>
-<p>参考链接：</p>
-<p><a href="http://stackoverflow.com/questions/4924285/how-to-deprecate-a-method-in-xcode" target="_blank" rel="external">How to deprecate a method in Xcode<br>How to deprecate a method in Xcode</a></p>
-<p><a href="http://stackoverflow.com/questions/24183812/swift-warning-equivalent" target="_blank" rel="external">Swift: #warning equivalent</a></p>
+        <p>待更新…</p>
 
       
     </div>
@@ -477,7 +373,7 @@ Debug：平">
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/2017-01-05-iOS lldb调试技巧/"
-           data-title="iOS奇淫技巧总结" data-url="http://jumpingfrog0.com/2017/2017-01-05-iOS lldb调试技巧/">
+           data-title="OS lldb调试技巧" data-url="http://jumpingfrog0.com/2017/2017-01-05-iOS lldb调试技巧/">
       </div>
     
   </div>
@@ -600,7 +496,7 @@ Debug：平">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode-卡住在-‘Verifying-Xcode…’界面"><span class="nav-number">1.</span> <span class="nav-text">Xcode 卡住在 ‘Verifying Xcode…’界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打印调试Log"><span class="nav-number">2.</span> <span class="nav-text">打印调试Log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swift桥接文件-import-file-not-found的问题"><span class="nav-number">3.</span> <span class="nav-text">Swift桥接文件 import \ file not found的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Swift中的编译器警告"><span class="nav-number">4.</span> <span class="nav-text">Swift中的编译器警告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消除弃用API的编译器警告"><span class="nav-number">5.</span> <span class="nav-text">消除弃用API的编译器警告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标记一个function-method为弃用"><span class="nav-number">6.</span> <span class="nav-text">标记一个function/method为弃用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Swift版本"><span class="nav-number">6.0.1.</span> <span class="nav-text">Swift版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Objective-C-GCC版本"><span class="nav-number">6.0.2.</span> <span class="nav-text">Objective-C/GCC版本</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#普通函数的语法"><span class="nav-number">6.0.2.1.</span> <span class="nav-text">普通函数的语法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Objective-C的语法"><span class="nav-number">6.0.2.2.</span> <span class="nav-text">Objective-C的语法</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
