@@ -60,12 +60,11 @@
 <meta name="description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
 help
 help ：列出所有的命令
-help \ : 列出某个命令更多的细节，例如 help print
+help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
 
 print
-print \ : 打印需要查看的变量，简写 p
-call 与 print 命令功能一样
-po \ : 打印对象的 des">
+print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
+call 与">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Xcode调试命令行工具 - lldb">
 <meta property="og:url" content="http://jumpingfrog0.com/2017/2017-07-15-Xcode调试命令行工具 - lldb/index.html">
@@ -73,26 +72,24 @@ po \ : 打印对象的 des">
 <meta property="og:description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
 help
 help ：列出所有的命令
-help \ : 列出某个命令更多的细节，例如 help print
+help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
 
 print
-print \ : 打印需要查看的变量，简写 p
-call 与 print 命令功能一样
-po \ : 打印对象的 des">
+print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
+call 与">
 <meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-202920.png">
 <meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-203055.png">
-<meta property="og:updated_time" content="2017-07-15T02:38:13.000Z">
+<meta property="og:updated_time" content="2017-07-15T02:57:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Xcode调试命令行工具 - lldb">
 <meta name="twitter:description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
 help
 help ：列出所有的命令
-help \ : 列出某个命令更多的细节，例如 help print
+help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
 
 print
-print \ : 打印需要查看的变量，简写 p
-call 与 print 命令功能一样
-po \ : 打印对象的 des">
+print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
+call 与">
 <meta name="twitter:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-202920.png">
 
 
@@ -320,12 +317,12 @@ po \ : 打印对象的 des">
         <h2 id="Xcode调试命令行工具-lldb"><a href="#Xcode调试命令行工具-lldb" class="headerlink" title="Xcode调试命令行工具 - lldb"></a>Xcode调试命令行工具 - lldb</h2><p><code>LLDB</code>是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。</p>
 <h3 id="help"><a href="#help" class="headerlink" title="help"></a>help</h3><ul>
 <li>help ：列出所有的命令</li>
-<li>help \<command> : 列出某个命令更多的细节，例如 help print</li>
+<li>help &lt; command &gt; : 列出某个命令更多的细节，例如 help print.</li>
 </ul>
 <h3 id="print"><a href="#print" class="headerlink" title="print"></a>print</h3><ul>
-<li>print \<expr> : 打印需要查看的变量，简写 p</expr></li>
+<li>print &lt; expr&gt; : 打印需要查看的变量，简写 p</li>
 <li>call 与 print 命令功能一样</li>
-<li>po \<expr> : 打印对象的 description 方法的结果</expr></li>
+<li>po &lt; expr &gt; : 打印对象的 description 方法的结果</li>
 <li>打印不同格式可以用 p/x number 打印十六进制，p/t number 打印二进制，p/c char 打印字符。这里是完整清单 <a href="https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html" target="_blank" rel="external">https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html</a></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(lldb) p (int)[[[self view] subviews] count]</div></pre></td></tr></table></figure>
@@ -334,7 +331,7 @@ po \ : 打印对象的 des">
 </code></pre><p>你会发现输出的信息中带有$1、$2的字样。实际上，lldb 的每次查询结果会保存在一些持续变量中，($[0-9]+)，这样你可以在后面的查询中直接使用这些值。比如现在我接下来要重新取回$1的值：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(lldb) po $1</div><div class="line">(UIView *) $1 = 0x0824c800 &lt;UITableView: 0x824c800; frame = (0 20; 768 1004); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = &lt;NSArray: 0x74c3010&gt;; layer = &lt;CALayer: 0x74c2710&gt;; contentOffset: &#123;0, 0&#125;&gt;</div></pre></td></tr></table></figure>
 <h3 id="expression"><a href="#expression" class="headerlink" title="expression"></a>expression</h3><ul>
-<li>expression \<cmd-options> – \<expr> : 声明一个临时变量或改变一个变量的值，简写 expr 或 e</expr></cmd-options></li>
+<li>expression &lt; cmd-options &gt; – &lt; expr &gt; : 声明一个临时变量或改变一个变量的值，简写 expr 或 e</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 把self.str 的值改为 &quot;111&quot;</div><div class="line">(lldb) e self.str = @&quot;111&quot;;</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 声明一个临时变量str2</div><div class="line">(lldb) e NSString *$str2 = @&quot;222&quot;`</div></pre></td></tr></table></figure>
@@ -373,7 +370,7 @@ Summary: octest`-[ViewController buttonDidClick:] + 153 at ViewController.m:61
 <li>next : 单步执行到下一个语句(process step-over)，缩写 n</li>
 <li>step : 跳进一个函数调试(process step-into)，缩写 s</li>
 <li>finish : 继续执行到下一个断点或返回语句，然后再次停止(process step-out)</li>
-<li>return \<return expression=""> : 会在当前断点处直接返回出函数，函数剩余部分不会被执行(process \<return expression="">)</return></return></li>
+<li>return &lt; RETURN EXPRESSION &gt; : 会在当前断点处直接返回出函数，函数剩余部分不会被执行(process &lt; RETURN EXPRESSION &gt;)</li>
 </ul>
 <h3 id="查找Button的target"><a href="#查找Button的target" class="headerlink" title="查找Button的target"></a>查找Button的target</h3><p>查看按钮按下后谁会接收到按钮发出的action</p>
 <pre><code>(lldb) po [sender allTargets]
