@@ -15,13 +15,13 @@ tags: iOS
 ### help
 
 * help ：列出所有的命令
-* help \<command> : 列出某个命令更多的细节，例如 help print
+* help < command > : 列出某个命令更多的细节，例如 help print.
 
 ### print
 
-* print \<expr> : 打印需要查看的变量，简写 p
+* print < expr> : 打印需要查看的变量，简写 p
 * call 与 print 命令功能一样
-* po \<expr> : 打印对象的 description 方法的结果
+* po < expr > : 打印对象的 description 方法的结果
 * 打印不同格式可以用 p/x number 打印十六进制，p/t number 打印二进制，p/c char 打印字符。这里是完整清单 [https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html](https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html)
 
 ```
@@ -41,7 +41,7 @@ tags: iOS
 
 ### expression
 
-* expression \<cmd-options> -- \<expr> : 声明一个临时变量或改变一个变量的值，简写 expr 或 e
+* expression < cmd-options > -- < expr > : 声明一个临时变量或改变一个变量的值，简写 expr 或 e
 
 ```
 // 把self.str 的值改为 "111"
@@ -156,7 +156,7 @@ LLDB 有时无法确定返回的类型，这种事情常常发生，手动指定
 * next : 单步执行到下一个语句(process step-over)，缩写 n
 * step : 跳进一个函数调试(process step-into)，缩写 s
 * finish : 继续执行到下一个断点或返回语句，然后再次停止(process step-out)
-* return \<RETURN EXPRESSION> : 会在当前断点处直接返回出函数，函数剩余部分不会被执行(process \<RETURN EXPRESSION>)
+* return < RETURN EXPRESSION > : 会在当前断点处直接返回出函数，函数剩余部分不会被执行(process < RETURN EXPRESSION >)
 
 ### 查找Button的target
 
