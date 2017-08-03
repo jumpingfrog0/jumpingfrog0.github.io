@@ -269,7 +269,7 @@ class StatusBarAndNavigationBarHiddenOnSwipeController: UITableViewController {
 }
 ```
 
-本文章所有示例代码下载地址：[Demo](/download/2016-03-26-status-bar-hidden-demo.zip)
+本文章所有示例代码下载地址：[Demo](https://github.com/jumpingfrog0/jumpingfrog0.github.io/tree/master/download/2016-03-26-status-bar-hidden-demo.zip)
 
 -------
 扩展阅读：[SWIZZLE](http://swifter.tips/swizzle/)
