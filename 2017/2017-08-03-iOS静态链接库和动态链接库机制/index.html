@@ -57,40 +57,122 @@
 
 
 
-<meta name="description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
-help
-help ：列出所有的命令
-help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
+<meta name="description" content="iOS静态链接库和动态链接库制作###.framework和.a 语言支持情况
 
-print
-print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
-call 与">
+
+
+库类型/语言类型
+OC
+Swift
+
+
+
+
+静态库
+iOS7+
+不支持
+
+
+动态库
+iOS8+
+iOS8+
+
+
+
+集成第三方库原本SDK已经作为别人APP工程里的第三方了，假如SDK中需要引用AFNetworking类似的三方库。
+
+
+
+库类型/引用
+内部引用
+外部引用
+
+
+
+
+静态库
+静态库无法再包含其他的.a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Xcode调试命令行工具 - lldb">
-<meta property="og:url" content="http://jumpingfrog0.com/2017/2017-07-15-Xcode调试命令行工具 - lldb/index.html">
+<meta property="og:title" content="iOS静态链接库和动态链接库制作">
+<meta property="og:url" content="http://jumpingfrog0.com/2017/2017-08-03-iOS静态链接库和动态链接库机制/index.html">
 <meta property="og:site_name" content="jumpingfrog0">
-<meta property="og:description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
-help
-help ：列出所有的命令
-help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
+<meta property="og:description" content="iOS静态链接库和动态链接库制作###.framework和.a 语言支持情况
 
-print
-print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
-call 与">
-<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-202920.png">
-<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-203055.png">
-<meta property="og:updated_time" content="2017-07-15T02:57:39.000Z">
+
+
+库类型/语言类型
+OC
+Swift
+
+
+
+
+静态库
+iOS7+
+不支持
+
+
+动态库
+iOS8+
+iOS8+
+
+
+
+集成第三方库原本SDK已经作为别人APP工程里的第三方了，假如SDK中需要引用AFNetworking类似的三方库。
+
+
+
+库类型/引用
+内部引用
+外部引用
+
+
+
+
+静态库
+静态库无法再包含其他的.a">
+<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/dynamic_lib_compile.png">
+<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/framework_compile.png">
+<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170803-163613@2x.png">
+<meta property="og:updated_time" content="2017-08-03T08:57:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Xcode调试命令行工具 - lldb">
-<meta name="twitter:description" content="Xcode调试命令行工具 - lldbLLDB是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。
-help
-help ：列出所有的命令
-help &amp;lt; command &amp;gt; : 列出某个命令更多的细节，例如 help print.
+<meta name="twitter:title" content="iOS静态链接库和动态链接库制作">
+<meta name="twitter:description" content="iOS静态链接库和动态链接库制作###.framework和.a 语言支持情况
 
-print
-print &amp;lt; expr&amp;gt; : 打印需要查看的变量，简写 p
-call 与">
-<meta name="twitter:image" content="http://os3yasu4i.bkt.clouddn.com/QQ20170714-202920.png">
+
+
+库类型/语言类型
+OC
+Swift
+
+
+
+
+静态库
+iOS7+
+不支持
+
+
+动态库
+iOS8+
+iOS8+
+
+
+
+集成第三方库原本SDK已经作为别人APP工程里的第三方了，假如SDK中需要引用AFNetworking类似的三方库。
+
+
+
+库类型/引用
+内部引用
+外部引用
+
+
+
+
+静态库
+静态库无法再包含其他的.a">
+<meta name="twitter:image" content="http://os3yasu4i.bkt.clouddn.com/dynamic_lib_compile.png">
 
 
 
@@ -108,7 +190,7 @@ call 与">
   };
 </script>
 
-  <title> Xcode调试命令行工具 - lldb | jumpingfrog0 </title>
+  <title> iOS静态链接库和动态链接库制作 | jumpingfrog0 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -268,7 +350,7 @@ call 与">
             
             
               
-                Xcode调试命令行工具 - lldb
+                iOS静态链接库和动态链接库制作
               
             
           </h1>
@@ -280,8 +362,8 @@ call 与">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-07-15T00:00:00+08:00" content="2017-07-15">
-              2017-07-15
+            <time itemprop="dateCreated" datetime="2017-08-03T00:00:00+08:00" content="2017-08-03">
+              2017-08-03
             </time>
           </span>
 
@@ -291,8 +373,8 @@ call 与">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/2017-07-15-Xcode调试命令行工具 - lldb/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/2017-07-15-Xcode调试命令行工具 - lldb/" itemprop="commentsCount"></span>
+                <a href="/2017/2017-08-03-iOS静态链接库和动态链接库机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/2017-08-03-iOS静态链接库和动态链接库机制/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -314,80 +396,138 @@ call 与">
       
 
       
-        <h2 id="Xcode调试命令行工具-lldb"><a href="#Xcode调试命令行工具-lldb" class="headerlink" title="Xcode调试命令行工具 - lldb"></a>Xcode调试命令行工具 - lldb</h2><p><code>LLDB</code>是XCode内置的为我们开发者提供的调试工具，可以在设置断点的时候在控制台中输入相关的lldb命令进行调试。</p>
-<h3 id="help"><a href="#help" class="headerlink" title="help"></a>help</h3><ul>
-<li>help ：列出所有的命令</li>
-<li>help &lt; command &gt; : 列出某个命令更多的细节，例如 help print.</li>
-</ul>
-<h3 id="print"><a href="#print" class="headerlink" title="print"></a>print</h3><ul>
-<li>print &lt; expr&gt; : 打印需要查看的变量，简写 p</li>
-<li>call 与 print 命令功能一样</li>
-<li>po &lt; expr &gt; : 打印对象的 description 方法的结果</li>
-<li>打印不同格式可以用 p/x number 打印十六进制，p/t number 打印二进制，p/c char 打印字符。这里是完整清单 <a href="https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html" target="_blank" rel="external">https://sourceware.org/gdb/onlinedocs/gdb/Output-Formats.html</a></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(lldb) p (int)[[[self view] subviews] count]</div></pre></td></tr></table></figure>
-<p>最后你看到的输出会是：</p>
-<pre><code>(int) $2 = 2
-</code></pre><p>你会发现输出的信息中带有$1、$2的字样。实际上，lldb 的每次查询结果会保存在一些持续变量中，($[0-9]+)，这样你可以在后面的查询中直接使用这些值。比如现在我接下来要重新取回$1的值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(lldb) po $1</div><div class="line">(UIView *) $1 = 0x0824c800 &lt;UITableView: 0x824c800; frame = (0 20; 768 1004); clipsToBounds = YES; autoresize = W+H; gestureRecognizers = &lt;NSArray: 0x74c3010&gt;; layer = &lt;CALayer: 0x74c2710&gt;; contentOffset: &#123;0, 0&#125;&gt;</div></pre></td></tr></table></figure>
-<h3 id="expression"><a href="#expression" class="headerlink" title="expression"></a>expression</h3><ul>
-<li>expression &lt; cmd-options &gt; – &lt; expr &gt; : 声明一个临时变量或改变一个变量的值，简写 expr 或 e</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 把self.str 的值改为 &quot;111&quot;</div><div class="line">(lldb) e self.str = @&quot;111&quot;;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 声明一个临时变量str2</div><div class="line">(lldb) e NSString *$str2 = @&quot;222&quot;`</div></pre></td></tr></table></figure>
+        <h1 id="iOS静态链接库和动态链接库制作"><a href="#iOS静态链接库和动态链接库制作" class="headerlink" title="iOS静态链接库和动态链接库制作"></a>iOS静态链接库和动态链接库制作</h1><p>###.framework和.a 语言支持情况</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">库类型/语言类型</th>
+<th style="text-align:center">OC</th>
+<th style="text-align:right">Swift</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">静态库</td>
+<td style="text-align:center">iOS7+</td>
+<td style="text-align:right">不支持</td>
+</tr>
+<tr>
+<td style="text-align:left">动态库</td>
+<td style="text-align:center">iOS8+</td>
+<td style="text-align:right">iOS8+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="集成第三方库"><a href="#集成第三方库" class="headerlink" title="集成第三方库"></a>集成第三方库</h3><p>原本SDK已经作为别人APP工程里的第三方了，假如SDK中需要引用AFNetworking类似的三方库。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">库类型/引用</th>
+<th style="text-align:center">内部引用</th>
+<th style="text-align:center">外部引用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">静态库</td>
+<td style="text-align:center">静态库无法再包含其他的.a静态库。只能把源码放进去一起编译。</td>
+<td style="text-align:center">静态库无法把第三方放在外部，否则就不叫“静态”了。只能打包进SDK内部，并修改类名，防止外部冲突。</td>
+</tr>
+<tr>
+<td style="text-align:left">动态库</td>
+<td style="text-align:center">如果用Swift可以直接引入源码，由于Swift含有命名空间，所以不会有冲突。</td>
+<td style="text-align:center">第三方库不打进去，放在外部，比如cocoapods的方式。别人编译的时候需要在他的环境里有该第三方依赖库。当提供给别人SDK的时候，你还需要给别人一个podfile。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="静态链接库"><a href="#静态链接库" class="headerlink" title="静态链接库"></a>静态链接库</h2><h3 id="制作静态链接库"><a href="#制作静态链接库" class="headerlink" title="制作静态链接库"></a>制作静态链接库</h3><ol>
+<li>创建静态链接库工程：<code>Cocoa Touch Static Library</code></li>
+<li>编写核心代码</li>
+<li>将头文件暴露出来：将头文件添加到<code>Build Phases</code>的<code>Copy Files</code>中去</li>
+<li>更改编译选项：修改 <code>Build Settings</code>的<code>Build Active Architecture Only</code>的值为<code>NO</code>，以满足可以运行在不同CPU环境中</li>
+<li><p>编译生成不同环境的静态链接库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ xcodebuild -configuration Debug -sdk iphonesimulator</div><div class="line">$ xcodebuild -configuration Debug -sdk iphoneos</div><div class="line">$ xcodebuild -configuration Release -sdk iponesimulator</div><div class="line">$ xcodebuild -configuration Release -sdk iphoneos</div></pre></td></tr></table></figure>
 <blockquote>
-<p><strong>注意：要使用 <code>$</code> 符号</strong></p>
+<p>iOS 中有四种不同编译环境的静态链接库：</p>
+<ul>
+<li>debug 模拟器</li>
+<li>debug 真机</li>
+<li>release 模拟器</li>
+<li>release 真机</li>
+</ul>
 </blockquote>
-<h3 id="image"><a href="#image" class="headerlink" title="image"></a>image</h3><p>image 命令可用于寻址，有多个组合命令。比较实用的用法是用于寻找栈地址对应的代码位置。比如下面一段代码：</p>
-<pre><code>NSArray *array = @[@&quot;1&quot;, @&quot;2&quot;];
-NSLog(@&quot;%@&quot;, array[2]);
-</code></pre><p>这段代码有明显的错误，程序运行这段代码后会抛出下面的异常：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">2017-07-14 22:26:40.836 octest[34972:1928364] *** Terminating app due to uncaught exception &apos;NSRangeException&apos;, reason: &apos;*** -[__NSArrayI objectAtIndex:]: index 2 beyond bounds [0 .. 1]&apos;</div><div class="line">*** First throw call stack:</div><div class="line">(</div><div class="line">	0   CoreFoundation                      0x000000010d0c6b0b __exceptionPreprocess + 171</div><div class="line">	1   libobjc.A.dylib                     0x000000010cb2b141 objc_exception_throw + 48</div><div class="line">	2   CoreFoundation                      0x000000010d00438b -[__NSArrayI objectAtIndex:] + 155</div><div class="line">	3   octest                              0x000000010c55ac29 -[ViewController buttonDidClick:] + 153</div><div class="line">	4   UIKit                               0x000000010d4ebd82 -[UIApplication sendAction:to:from:forEvent:] + 83</div><div class="line">	5   UIKit                               0x000000010d6705ac -[UIControl sendAction:to:forEvent:] + 67</div><div class="line">	6   UIKit                               0x000000010d6708c7 -[UIControl _sendActionsForEvents:withEvent:] + 450</div><div class="line">	7   UIKit                               0x000000010d66f802 -[UIControl touchesEnded:withEvent:] + 618</div><div class="line">	8   UIKit                               0x000000010d5597ea -[UIWindow _sendTouchesForEvent:] + 2707</div><div class="line">	9   UIKit                               0x000000010d55af00 -[UIWindow sendEvent:] + 4114</div><div class="line">	10  UIKit                               0x000000010d507a84 -[UIApplication sendEvent:] + 352</div><div class="line">	11  UIKit                               0x000000010dceb5d4 __dispatchPreprocessedEventFromEventQueue + 2926</div><div class="line">	12  UIKit                               0x000000010dce3532 __handleEventQueue + 1122</div><div class="line">	13  CoreFoundation                      0x000000010d06cc01 __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 17</div><div class="line">	14  CoreFoundation                      0x000000010d0520cf __CFRunLoopDoSources0 + 527</div><div class="line">	15  CoreFoundation                      0x000000010d0515ff __CFRunLoopRun + 911</div><div class="line">	16  CoreFoundation                      0x000000010d051016 CFRunLoopRunSpecific + 406</div><div class="line">	17  GraphicsServices                    0x0000000110e9ba24 GSEventRunModal + 62</div><div class="line">	18  UIKit                               0x000000010d4ea134 UIApplicationMain + 159</div><div class="line">	19  octest                              0x000000010c55b6df main + 111</div><div class="line">	20  libdyld.dylib                       0x000000010ff3065d start + 1</div><div class="line">)</div><div class="line">libc++abi.dylib: terminating with uncaught exception of type NSException</div></pre></td></tr></table></figure>
-<p>我们可以看到出错是在堆栈信息的第3行提示的 <code>buttonDidClick</code> 方法中，我们怀疑出错的地址是 0x000000010c55ac29，可以根据执行文件名判断，或者最小的栈地址）。为了进一步精确定位，我们可以输入以下的命令：</p>
-<pre><code>(lldb)image lookup --address 0x000000010c55ac29
-</code></pre><p>命令执行后返回：</p>
-<pre><code>Address: octest[0x0000000100001c29] (octest.__TEXT.__text + 473)
-Summary: octest`-[ViewController buttonDidClick:] + 153 at ViewController.m:61
-</code></pre><p>我们可以看到，出错的位置是 ViewController.m 的第61行。</p>
-<h3 id="无法确定类型"><a href="#无法确定类型" class="headerlink" title="无法确定类型"></a>无法确定类型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(lldb) e NSArray *$array = @[ @&quot;Saturday&quot;, @&quot;Sunday&quot;, @&quot;Monday&quot; ]</div><div class="line">(lldb) p [$array count]</div><div class="line">2</div><div class="line">(lldb) po [[$array objectAtIndex:0] uppercaseString]</div><div class="line">SATURDAY</div><div class="line">(lldb) p [[$array objectAtIndex:$a] characterAtIndex:0]</div><div class="line">error: no known method &apos;-characterAtIndex:&apos;; cast the message send to the method&apos;s return type</div><div class="line">error: 1 errors parsing expression</div></pre></td></tr></table></figure>
-<p>LLDB 有时无法确定返回的类型，这种事情常常发生，手动指定类型就好了：</p>
-<pre><code>(lldb) p (char)[[$array objectAtIndex:$a] characterAtIndex:0]
-&apos;M&apos;
-</code></pre><h3 id="断点管理"><a href="#断点管理" class="headerlink" title="断点管理"></a>断点管理</h3><ul>
-<li>breakpoint list ： 可以查看所有断点， 简写 br li</li>
+<p>编译后就能如下四个目录了，其中目录中的 libHelloLib.a 就是编译后的静态库，include 文件夹是对外暴露的头文件。</p>
+<p><img src="http://os3yasu4i.bkt.clouddn.com/dynamic_lib_compile.png" alt=""></p>
+<p>可以使用命令 <code>lipo -info xxx</code>查看静态库所支持的CPU环境</p>
+<pre><code>$ lipo -info build/Release-iphoneos/libHelloLib.a
+$ lipo -info build/Release-iphonesimulator/libHelloLib.a
+</code></pre><p>分别输出：</p>
+<pre><code>Architectures in the fat file: build/Release-iphoneos/libHelloLib.a are: armv7 arm6
+Architectures in the fat file: build/Release-iphonesimulator/libHelloLib.a are: i386 x86_64
+</code></pre></li>
+<li><p>合并静态库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lipo -create 静态库1 静态库2 -output 新静态库名称.a</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="使用静态链接库"><a href="#使用静态链接库" class="headerlink" title="使用静态链接库"></a>使用静态链接库</h3><ul>
+<li>直接将 <code>.a</code> 文件和头文件拖进项目工程中即可</li>
+<li>如果编译报错，检查 <code>Build Phases</code> –&gt; <code>Link Binary With Libraries</code> 选项是否有添加 <code>.a</code> 文件</li>
+<li>如果静态链接库中有分类的话，必须在 <code>Build Settings</code> –&gt; <code>Other Linker Flags</code> 中添加 <code>-Objc</code>，如果还崩溃的话，还得加上 <code>-all_load</code></li>
+<li>关于在静态库中添加资源，一般使用的是 bundle 文件夹。注意，默认的静态库编译是不会将bundle一起编译进去的，所以这个文件夹需要我们手动添加到使用静态库的工程中去。</li>
 </ul>
-<h4 id="设置断点触发条件"><a href="#设置断点触发条件" class="headerlink" title="设置断点触发条件"></a>设置断点触发条件</h4><p>断点可以设置条件，只有当条件满足时，才会进入断点，并且可以设置进入断点时执行某些操作，比如打印log，执行lldb命令等。</p>
-<p>这种应用场景主要是在循环遍历时，想要断点跟踪就只能通过这种方式了，除非添加NSLog打印，但是这种需要手动添加代码，在调试时才想到要添加一些打印语句，这时候又得重新运行，这太慢了，所以懂得设置断点触发条件将会大大提高效率。</p>
-<p>操作如下：</p>
-<p>断点触发条件（打印log）<br><img src="http://os3yasu4i.bkt.clouddn.com/QQ20170714-202920.png" alt=""></p>
-<p>断点触发条件（执行lldb命令）<br><img src="http://os3yasu4i.bkt.clouddn.com/QQ20170714-203055.png" alt=""></p>
-<h3 id="打印视图层次结构"><a href="#打印视图层次结构" class="headerlink" title="打印视图层次结构"></a>打印视图层次结构</h3><pre><code>(lldbd) po [self.view recursiveDescription]
-</code></pre><h3 id="更新UI"><a href="#更新UI" class="headerlink" title="更新UI"></a>更新UI</h3><pre><code>(lldb) e ((UIButton *)sender).backgroundColor = [UIColor yellowColor]
-(UICachedDeviceRGBColor *) $0 = 0x000061800007e280
-(lldb) e (void)[CATransaction flush]
-</code></pre><h3 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h3><ul>
-<li>continue : 继续执行下去到达下一个断点(process continue)，或者使用缩写 c</li>
-<li>next : 单步执行到下一个语句(process step-over)，缩写 n</li>
-<li>step : 跳进一个函数调试(process step-into)，缩写 s</li>
-<li>finish : 继续执行到下一个断点或返回语句，然后再次停止(process step-out)</li>
-<li>return &lt; RETURN EXPRESSION &gt; : 会在当前断点处直接返回出函数，函数剩余部分不会被执行(process &lt; RETURN EXPRESSION &gt;)</li>
+<h2 id="动态链接库"><a href="#动态链接库" class="headerlink" title="动态链接库"></a>动态链接库</h2><p>动态库分为两种：<strong>动态链接库</strong> 和 <strong>动态加载库</strong></p>
+<ul>
+<li><p>对于动态链接库而言，build可执行文件的时候需要指定它依赖哪些库，当可执行文件运行时，如果操作系统没有加载过这些库，那就会把这些库随着可执行文件的加载而加载进内存中，供可执行程序运行。如果多个可执行文件依赖同一个动态链接库，那么内存中只会有一份动态链接库的代码，然后把它共享给所有相关可执行文件的进程使用，所以它也叫共享库(shared library)。比如pthread就是一个这样的库。</p>
+</li>
+<li><p>对于动态加载库而言，build可执行文件的时候就不需要指定它依赖哪些库，当可执行文件运行时，如果需要加载某个库，就用dlopen、dlsym、dlclose等函数来动态地把库加载到内存，并调用库里面的函数。各大软件的插件模块基本上就都是这样的库。事实上，静态库和动态链接库也可以被动态加载，只是由于使用方式的不同，才多了一个动态加载库这样的类别。</p>
+</li>
 </ul>
-<h3 id="查找Button的target"><a href="#查找Button的target" class="headerlink" title="查找Button的target"></a>查找Button的target</h3><p>查看按钮按下后谁会接收到按钮发出的action</p>
-<pre><code>(lldb) po [sender allTargets]
-{(
-    &lt;ViewController: 0x7fa6415083f0&gt;
-)}
-
-(lldb) po [sender actionsForTarget:(id)0x7fa6415083f0 forControlEvent:UIControlEventTouchUpInside]
-&lt;__NSArrayM 0x600000056e60&gt;(
-buttonDidClick:
-)
-</code></pre><p>更多命令参考：<a href="http://lldb.llvm.org/lldb-gdb.html" target="_blank" rel="external">The LLDB Debugger</a></p>
-<p>另外，facebook 开源了一个扩展的 <a href="https://github.com/facebook/chisel" target="_blank" rel="external">LLDB命令库</a>，有兴趣可以看看。</p>
+<blockquote>
+<p>注意：在iOS中，真正的动态链接库可以使用但是不能上架！</p>
+<p>iOS仍然不允许进程间共享动态库，即iOS上的动态库只能是私有的，因为我们仍然不能将动态库文件放置在除了自身沙盒以外的其它任何地方。只有iOS系统自身的framework才是真正的动态链接库。</p>
+<p>因此，我们制作framework时是将其编译成静态库，可以说framework是升级版的静态库。</p>
+<p>不过iOS10上开放了App Extension功能，可以为一个应用创建插件，这样主app和插件之间共享动态库还是可行的。</p>
+</blockquote>
+<h3 id="制作动态链接库"><a href="#制作动态链接库" class="headerlink" title="制作动态链接库"></a>制作动态链接库</h3><ol>
+<li>创建动态链接库工程：<code>Cocoa Touch Framework</code></li>
+<li>更改编译选项为静态库：设置 <code>Build Settings</code> –&gt; <code>Mach-O Type</code> 为 <code>Static Library</code></li>
+<li>暴露头文件和资源文件：将头文件添加到 <code>Build Phases</code> –&gt; <code>Headers</code> 的 <code>Public</code> 分组中，将 bundle 文件添加到 <code>Build Phases</code> –&gt; <code>Copy Bundle Resource</code>中</li>
+<li><p>编译</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xcodebuild -configuration Release -sdk iphonesimulator</div><div class="line">xcodebuild -configuration Release -sdk iphoneos</div></pre></td></tr></table></figure>
+<p> 编译后的目录</p>
+<p> <img src="http://os3yasu4i.bkt.clouddn.com/framework_compile.png" alt=""></p>
+</li>
+<li><p>合并</p>
+<p> 注意：我们要合并的并不是 <code>xxx.framework</code>，而是 <code>xxx.framework</code> 目录下的 <code>xxx</code>，以上图为例，我们要合并的文件就是 <code>HelloSDK</code>。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lipo -create build/Release-iphonesimulator/HelloSDK.framework/HelloSDK build/Release-iphoneos/HelloSDK.framework/HelloSDK -output build/HelloSDK</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意：这里必须编译成 Release 选项，不然将framework引入项目工程后不能在模拟器上运行，会报错：</p>
+<pre><code>&quot;_OBJC_CLASS_$_xxxx&quot;, referenced from: xxx
+Linker command failed with exit code 1(use -v to see invocation)
+</code></pre><p>以及一个warning：</p>
+<pre><code>Ignoring file xxx/xxx.framework/xxx, missing required architecture x86_64 in file xxx/xxx.framework/xxx (2 slices)
+</code></pre><p>从warning中，我们可以看出原因是，动态库中缺少 x86_64 的架构，我们查看一下动态库对不同环境的支持，就能看出端倪了。</p>
+<pre><code>lipo -info build/Release-iphoneos/HelloSDK.framework/HelloSDK
+lipo -info build/Release-iphonesimulator/HelloSDK.framework/HelloSDK
+lipo -info build/Debug-iphoneos/HelloSDK.framework/HelloSDK
+lipo -info build/Debug-iphonesimulator/HelloSDK.framework/HelloSDK    
+</code></pre><p>分别输出</p>
+<pre><code>Architectures in the fat file: build/Release-iphoneos/HelloSDK.framework/HelloSDK are: armv7 arm64 
+Architectures in the fat file: build/Release-iphonesimulator/HelloSDK.framework/HelloSDK are: i386 x86_64
+Non-fat file: build/Debug-iphoneos/HelloSDK.framework/HelloSDK is architecture: armv7
+Non-fat file: build/Debug-iphonesimulator/HelloSDK.framework/HelloSDK is architecture: i386
+</code></pre><h3 id="使用动态链接库"><a href="#使用动态链接库" class="headerlink" title="使用动态链接库"></a>使用动态链接库</h3><ul>
+<li>将合并后的文件替换掉编译后的 xxx.framework 中的对应的动态库文件</li>
+<li>将 xxx.framework 拖进项目工程即可</li>
+<li><p>一般情况下，我们会把 xxx.framework 中的 xxx.bundle 拖出来，放到与 xxx.framework 同级目录下的 resources 文件夹中</p>
+<p>  <img src="http://os3yasu4i.bkt.clouddn.com/QQ20170803-163613@2x.png" alt=""></p>
+</li>
+</ul>
 <hr>
-<p>参考文档：</p>
-<p><a href="http://www.starfelix.com/blog/2014/03/17/lldbdiao-shi-ming-ling-chu-tan/" target="_blank" rel="external">LLDB调试命令初探</a></p>
-<p><a href="https://objccn.io/issue-19-2/" target="_blank" rel="external">与调试器共舞 - LLDB 的华尔兹</a></p>
+<p><a href="https://github.com/jumpingfrog0/jumpingfrog0.github.io/tree/master/download/2017-08-03-dynamic_lib_demo.zip" target="_blank" rel="external">Demo 下载</a></p>
+<p>参考：<a href="http://www.jianshu.com/p/5eea9a56d249" target="_blank" rel="external">Xcode动态链接库与静态链接库讲解及制作方式
+</a></p>
 
       
     </div>
@@ -411,17 +551,13 @@ buttonDidClick:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/2017-04-20-iOS多线程总结/" rel="next" title="iOS 多线程总结">
-                <i class="fa fa-chevron-left"></i> iOS 多线程总结
+              <a href="/2017/2017-07-15-Xcode调试命令行工具 - lldb/" rel="next" title="Xcode调试命令行工具 - lldb">
+                <i class="fa fa-chevron-left"></i> Xcode调试命令行工具 - lldb
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/2017-08-03-iOS静态链接库和动态链接库机制/" rel="prev" title="iOS静态链接库和动态链接库制作">
-                iOS静态链接库和动态链接库制作 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -473,8 +609,8 @@ buttonDidClick:
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/2017-07-15-Xcode调试命令行工具 - lldb/"
-           data-title="Xcode调试命令行工具 - lldb" data-url="http://jumpingfrog0.com/2017/2017-07-15-Xcode调试命令行工具 - lldb/">
+      <div class="ds-thread" data-thread-key="2017/2017-08-03-iOS静态链接库和动态链接库机制/"
+           data-title="iOS静态链接库和动态链接库制作" data-url="http://jumpingfrog0.com/2017/2017-08-03-iOS静态链接库和动态链接库机制/">
       </div>
     
   </div>
@@ -597,7 +733,7 @@ buttonDidClick:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Xcode调试命令行工具-lldb"><span class="nav-number">1.</span> <span class="nav-text">Xcode调试命令行工具 - lldb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#help"><span class="nav-number">1.1.</span> <span class="nav-text">help</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#print"><span class="nav-number">1.2.</span> <span class="nav-text">print</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expression"><span class="nav-number">1.3.</span> <span class="nav-text">expression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#image"><span class="nav-number">1.4.</span> <span class="nav-text">image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无法确定类型"><span class="nav-number">1.5.</span> <span class="nav-text">无法确定类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断点管理"><span class="nav-number">1.6.</span> <span class="nav-text">断点管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置断点触发条件"><span class="nav-number">1.6.1.</span> <span class="nav-text">设置断点触发条件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印视图层次结构"><span class="nav-number">1.7.</span> <span class="nav-text">打印视图层次结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新UI"><span class="nav-number">1.8.</span> <span class="nav-text">更新UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程控制"><span class="nav-number">1.9.</span> <span class="nav-text">流程控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找Button的target"><span class="nav-number">1.10.</span> <span class="nav-text">查找Button的target</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS静态链接库和动态链接库制作"><span class="nav-number">1.</span> <span class="nav-text">iOS静态链接库和动态链接库制作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#集成第三方库"><span class="nav-number">1.0.1.</span> <span class="nav-text">集成第三方库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态链接库"><span class="nav-number">1.1.</span> <span class="nav-text">静态链接库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#制作静态链接库"><span class="nav-number">1.1.1.</span> <span class="nav-text">制作静态链接库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用静态链接库"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用静态链接库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态链接库"><span class="nav-number">1.2.</span> <span class="nav-text">动态链接库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#制作动态链接库"><span class="nav-number">1.2.1.</span> <span class="nav-text">制作动态链接库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用动态链接库"><span class="nav-number">1.2.2.</span> <span class="nav-text">使用动态链接库</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

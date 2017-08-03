@@ -379,7 +379,7 @@
 <p><code>TrackedString</code>结构体定义了一个用于存储的属性名为<em>value</em>，类型为<code>String</code>，并将初始化值设为””（即一个空字符串）。该结构体同时也定义了另一个用于存储的属性名为<em>numberOfEdits</em>，类型为<code>Int</code>，它用于记录属性<em>value</em>被修改的次数。这个功能的实现通过属性<em>value</em>的<code>didSet</code>方法实现，每当给<em>value</em>赋新值时就会调用<code>didSet</code>方法，给<em>numberOfEdits</em>加一。</p>
 <p>结构体<code>TrackedString</code>和它的属性<em>value</em>均没有明确的申明访问级别，所以它们都拥有默认的访问级别<code>internal</code>。但是该结构体的<em>numberOfEdits</em>属性使用<code>private(set)</code>修饰符进行申明，这意味着<em>numberOfEdits</em>属性只能在定义该结构体的源文件中赋值。<em>numberOfEdits</em>属性的<code>Getter</code>依然是默认的访问级别<code>internal</code>，但是<code>Setter</code>的访问级别是<code>private</code>，这表示该属性只有在当前的源文件中是可读可写的，在当前源文件所属的模块中它只是一个可读的属性。</p>
 <p>如果你实例化<code>TrackedString</code>结构体，并且多次对<em>value</em>属性的值进行修改，你就会看到<em>numberOfEdits</em>的值会随着修改次数更改：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> stringToEdit = <span class="type">TrackedString</span>()</div><div class="line">stringToEdit.value = <span class="string">"This string will be tracked."</span></div><div class="line">stringToEdit.value += <span class="string">" This edit will increment numberOfEdits."</span></div><div class="line">stringToEdit.value += <span class="string">" So will this one."</span></div><div class="line"><span class="built_in">println</span>(<span class="string">"The number of edits is \(stringToEdit.numberOfEdits)"</span>)</div><div class="line"><span class="comment">// prints "The number of edits is 3"</span></div></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> stringToEdit = <span class="type">TrackedString</span>()</div><div class="line">stringToEdit.value = <span class="string">"This string will be tracked."</span></div><div class="line">stringToEdit.value += <span class="string">" This edit will increment numberOfEdits."</span></div><div class="line">stringToEdit.value += <span class="string">" So will this one."</span></div><div class="line"><span class="built_in">println</span>(<span class="string">"The number of edits is <span class="subst">\(stringToEdit.numberOfEdits)</span>"</span>)</div><div class="line"><span class="comment">// prints "The number of edits is 3"</span></div></pre></td></tr></table></figure>
 <p>虽然你可以在其他的源文件中实例化该结构体并且获取到<em>numberOfEdits</em>属性的值，但是你不能对其进行赋值。这样就能很好的告诉使用者，你只管使用，而不需要知道其实现细节。</p>
 <h4 id="初始化（Initializers）"><a href="#初始化（Initializers）" class="headerlink" title="初始化（Initializers）"></a>初始化（Initializers）</h4><p>我们可以给自定义的初始化方法指定访问级别，但是必须要低于或等于它所属类的访问级别。但如果该初始化方法是必须要使用的话，那它的访问级别就必须和所属类的访问级别相同。</p>
 <p>如同函数或方法参数，初始化方法参数的访问级别也不能低于初始化方法的访问级别。</p>
@@ -434,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/2016-12-01-custom-xcode-templetes/" rel="next" title="自定义Xcode模板">
-                <i class="fa fa-chevron-left"></i> 自定义Xcode模板
+              <a href="/2016/2016-03-26-establish-static-blog-with-hexo/" rel="next" title="使用Hexo搭建静态博客">
+                <i class="fa fa-chevron-left"></i> 使用Hexo搭建静态博客
               </a>
             
           </div>
@@ -542,7 +542,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
