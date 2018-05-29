@@ -1,0 +1,899 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="vim," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="vim-lldb 瞎折腾前几天突然心血来潮，想要在使用 vim 来写 C 语言程序，并在终端进行调试，Google 了下，可以使用 GDB 来进行调试，配合 vim 的插件有 Clewn 和 vimGdb。一番折腾，发现 Mac 对 gdb 的支持很不友好，果断放弃，后来发现，可以直接用 lldb 来 debug，于是又开始了一番折腾。
+LLDB Vim Frontend ：官方的 LLDB Vi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vim-lldb 瞎折腾">
+<meta property="og:url" content="http://jumpingfrog0.com/2018/2018-05-30-vim-lldb瞎折腾/index.html">
+<meta property="og:site_name" content="jumpingfrog0">
+<meta property="og:description" content="vim-lldb 瞎折腾前几天突然心血来潮，想要在使用 vim 来写 C 语言程序，并在终端进行调试，Google 了下，可以使用 GDB 来进行调试，配合 vim 的插件有 Clewn 和 vimGdb。一番折腾，发现 Mac 对 gdb 的支持很不友好，果断放弃，后来发现，可以直接用 lldb 来 debug，于是又开始了一番折腾。
+LLDB Vim Frontend ：官方的 LLDB Vi">
+<meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/vim-lldb.png">
+<meta property="og:updated_time" content="2018-05-29T19:19:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vim-lldb 瞎折腾">
+<meta name="twitter:description" content="vim-lldb 瞎折腾前几天突然心血来潮，想要在使用 vim 来写 C 语言程序，并在终端进行调试，Google 了下，可以使用 GDB 来进行调试，配合 vim 的插件有 Clewn 和 vimGdb。一番折腾，发现 Mac 对 gdb 的支持很不友好，果断放弃，后来发现，可以直接用 lldb 来 debug，于是又开始了一番折腾。
+LLDB Vim Frontend ：官方的 LLDB Vi">
+<meta name="twitter:image" content="http://os3yasu4i.bkt.clouddn.com/vim-lldb.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> vim-lldb 瞎折腾 | jumpingfrog0 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">jumpingfrog0</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', '_hsnBCSxyAH__Kvfd1uL','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                vim-lldb 瞎折腾
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-30T00:00:00+08:00" content="2018-05-30">
+              2018-05-30
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/2018-05-30-vim-lldb瞎折腾/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/2018-05-30-vim-lldb瞎折腾/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="vim-lldb-瞎折腾"><a href="#vim-lldb-瞎折腾" class="headerlink" title="vim-lldb 瞎折腾"></a>vim-lldb 瞎折腾</h1><p>前几天突然心血来潮，想要在使用 vim 来写 C 语言程序，并在终端进行调试，Google 了下，可以使用 GDB 来进行调试，配合 vim 的插件有 <a href="http://clewn.sourceforge.net/install.html#clewn" target="_blank" rel="external">Clewn</a> 和 <a href="http://clewn.sourceforge.net/install.html#vimgdb" target="_blank" rel="external">vimGdb</a>。一番折腾，发现 Mac 对 gdb 的支持很不友好，果断放弃，后来发现，可以直接用 <code>lldb</code> 来 debug，于是又开始了一番折腾。</p>
+<p><a href="https://github.com/llvm-mirror/lldb/tree/master/utils/vim-lldb" target="_blank" rel="external">LLDB Vim Frontend</a> ：官方的 LLDB Vim Frontend，支持 MacVim。</p>
+<p><a href="https://github.com/gilligan/vim-lldb" target="_blank" rel="external">vim-lldb</a> ：LLDB Vim Frontend 的 Fork 项目，可直接使用vim插件管理工具安装。</p>
+<p><a href="https://github.com/dbgx/lldb.nvim" target="_blank" rel="external">lldb.nvim</a> : Neovim 的 lldb 调试工具。<strong>本文使用的就是这个。</strong></p>
+<h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h3><ul>
+<li><a href="https://github.com/neovim/neovim" target="_blank" rel="external">Neovim</a></li>
+<li><a href="https://github.com/neovim/python-client" target="_blank" rel="external">Neovim python2-client</a></li>
+<li><a href="http://lldb.llvm.org/" target="_blank" rel="external">LLDB</a> (安装了Xcode就自带lldb了，不需要额外安装)</li>
+</ul>
+<h3 id="1-安装-lldb-nvim"><a href="#1-安装-lldb-nvim" class="headerlink" title="1. 安装 lldb.nvim"></a>1. 安装 lldb.nvim</h3><ol>
+<li><p>使用vim插件管理工具<a href="https://github.com/junegunn/vim-plug" target="_blank" rel="external">vim-plug</a> 安装</p>
+<pre><code>Plug &apos;dbgx/lldb.nvim&apos;
+</code></pre></li>
+<li><p>在 neovim 的配置文件 <code>~/.config/nvim/init.vim</code> 中加入以下配置：</p>
+<pre><code>set rtp+=/path/to/lldb.nvim
+</code></pre></li>
+<li><p>在 vim 中运行以下命令安装插件：</p>
+<pre><code>:PlugInstall
+</code></pre></li>
+<li><p>在 vim 中输入 <code>:help lldb</code> 能看到 lldb 的文档，就证明插件安装成功了三分之一。</p>
+</li>
+</ol>
+<p><strong>安装失败的情况</strong></p>
+<ul>
+<li>如果提示异常 <code>Not an editor command: PlugInstall</code>，进行以下检查：<ul>
+<li>检查 <code>vim-plug</code> 是否已经安装了<ol>
+<li>vim : <code>~/.vim/autoload/plug.vim</code> 文件存在</li>
+<li>neovim : <code>~/.local/share/nvim/site/autoload/plug.vim</code> 文件存在</li>
+</ol>
+</li>
+<li>检查当前使用的是 <code>vim</code> 还是 <code>neovim</code><ol>
+<li>vim : <code>~/.vimrc</code> 按照文档正确配置了 lldb.nvim</li>
+<li>neovim : <code>~/.config/nvim/init.vim</code> 按照文档正确配置了 lldb.nvim</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>如果提示异常 <code>Not an editor command: lldb</code>，有3种可能：<ul>
+<li>只在原生 vim 中安装了 lldb，但是运行 <code>:help lldb</code> 时使用的是 neovim</li>
+<li>只在 neovim 中安装了 lldb，但是运行 <code>:help lldb</code> 时使用的 原生 vim</li>
+<li>需要重启终端</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-安装-neovim-的-python-库-Pynvim"><a href="#2-安装-neovim-的-python-库-Pynvim" class="headerlink" title="2. 安装 neovim 的 python 库 Pynvim"></a>2. 安装 neovim 的 python 库 Pynvim</h3><pre><code>$ pip2 install neovim
+</code></pre><h3 id="3-解决-lldb-和-neovim-python-版本不一致的问题"><a href="#3-解决-lldb-和-neovim-python-版本不一致的问题" class="headerlink" title="3. 解决 lldb 和 neovim python 版本不一致的问题"></a>3. 解决 lldb 和 neovim python 版本不一致的问题</h3><p>经过上述过程后，lldb.nvim 的安装还是未完全的，因为你会发现 vim-lldb  的那些命令没法使用，在 nvim 中输入 <code>:LLsession new</code> 会提示 <code>Not an editor command: LLsession</code>。</p>
+<p>需要更新远程插件：</p>
+<pre><code>:UpdateRemotePlugins
+</code></pre><p>但是输入上面的命令会导致 python 的闪退：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function &lt;SNR&gt;14_UpdateRemotePlugins..&lt;SNR&gt;14_RegistrationCommands..remote#host#Require..&lt;SNR&gt;14_RequirePythonHost, line 15</div><div class="line">Vim(if):Channel was closed by the client</div><div class="line">function &lt;SNR&gt;14_UpdateRemotePlugins..&lt;SNR&gt;14_RegistrationCommands..remote#host#Require..&lt;SNR&gt;14_RequirePythonHost, line 22</div><div class="line">Failed to load python host. You can try to see what happened by starting Neovim with the environment variable $NVIM_PYTHON_LOG_FILE set to a file and opening the generated log file. Also, the host stderr will be available in Neovim</div><div class="line"> log, so it may contain useful information. See also ~/.nvimlog.</div><div class="line"> Press ENTER or type command to continue</div></pre></td></tr></table></figure>
+<p>这是 lldb 和 neovim 中使用的 python 版本不一致导致的。</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>OSX 可以安装多个不同版本的python，这就可能会导致一些冲突。</p>
+<p>我们在 python 中导入 neovim 的 module，可以正常运行</p>
+<pre><code>$ python
+&gt;&gt;&gt; import neovim
+&gt;&gt;&gt;
+</code></pre><p>而导入 lldb 的 module，会报以下错误：</p>
+<pre><code>$ python
+&gt;&gt;&gt; import lldb
+Fatal Python error: PyThreadState_Get: no current thread
+</code></pre><p>这是因为我们尝试导入的模块链接的是其他不同版本的 python，而不是系统的 python 版本。</p>
+<p>系统默认的 python 存在于</p>
+<pre><code>/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python
+</code></pre><p>而 lldb 模块是来自于 <code>Xcode Developer Tools</code>，链接的 python 版本是</p>
+<pre><code>/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python
+</code></pre><h4 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h4><p>neovim 中有一个 python plugin provider，使得能在 neovim 中运行 python 脚本，这个 provider 是可以指定的。只要 neovim 的 python provider 是 Xcode 下的 python 版本，就可以在 neovim 中运行 lldb了。</p>
+<p>有两种选择：</p>
+<ol>
+<li><p>使用系统的 python 作为 neovim 的默认 python provider，然后使用脚本进行动态修改配置使得在 neovim 中能使用 lldb，可以参考这篇文章 <a href="https://blog.rplasil.name/2016/03/how-to-debug-neovim-python-remote-plugin.html" target="_blank" rel="external">How to debug neovim python remote plugin</a>。但是我没有成功，不知道是哪一步弄错了，因此我用了第二种方法。</p>
+</li>
+<li><p>使用 Xcode 下的 python 版本作为 neovim 的 python provider，这样自然就能运行 lldb 了，但是这又会导致 <code>import neovim</code> 时闪退，因为最初安装的 neovim 的 python 库 Pynvim 使用的是系统的 python（见上面第二个步骤）。这是有办法解决的，<a href="https://github.com/dbgx/lldb.nvim/issues/15" target="_blank" rel="external">issue #15</a> 和 <a href="https://github.com/dbgx/lldb.nvim/issues/18" target="_blank" rel="external">issue #18</a> 有详细的讨论。</p>
+</li>
+</ol>
+<p>步骤如下：</p>
+<p>1) 首先确保当前 python 的路径是 <code>/usr/bin</code></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">	$ which python</div><div class="line">	/usr/bin/python</div><div class="line"></div><div class="line">2) 然后在 `.bash_profile` 中输入以下两行</div></pre></td></tr></table></figure>
+
+export PATH=&quot;/usr/bin:${PATH}&quot;
+export PYTHONPATH=&quot;/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Resources/Python:${PYTHONPATH}&quot;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">3) 卸载 pip</div><div class="line"></div><div class="line">	```terminal</div><div class="line">	$ sudo pip uninstall pip</div></pre></td></tr></table></figure>
+</code></pre><p>4) 重装 pip，因为指定了 $PYTHONPATH ，所以使用的是新的 python 来重装的</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ url https://bootstrap.pypa.io/get-pip.py -o get-pip.py</div><div class="line">$ sudo python get-pip.py</div></pre></td></tr></table></figure>
+</code></pre><p>5) 重装 neovim 的 python 库</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">	$ which pip</div><div class="line">	/usr/local/bin/pip</div><div class="line"></div><div class="line">	$ sudo /usr/local/bin/pip install neovim</div><div class="line"></div><div class="line">6) 更新远程插件</div><div class="line"></div><div class="line">	```vim</div><div class="line">	:UpdateRemotePlugins</div></pre></td></tr></table></figure>
+</code></pre><p>然后就可以同时导入 lldb 和 neovim 了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ python</div><div class="line">&gt;&gt;&gt; import lldb</div><div class="line">&gt;&gt;&gt; import neovim</div></pre></td></tr></table></figure>
+<p>此时在 nvim 中就可以使用 LL* 等命令了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// main.cpp</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> n)</span> </span></div><div class="line">&#123; </div><div class="line">    <span class="keyword">int</span> sum=<span class="number">0</span>,i;</div><div class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">7</span>; i++) </div><div class="line">    &#123;</div><div class="line">        sum+=i; </div><div class="line">    &#125; </div><div class="line">    <span class="keyword">return</span> sum; </div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></div><div class="line">&#123; </div><div class="line">    <span class="keyword">int</span> i;</div><div class="line">    <span class="keyword">int</span> result = <span class="number">0</span>; </div><div class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)</div><div class="line">    &#123;</div><div class="line">        result += i;  </div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">cout</span> &lt;&lt; result &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    func(<span class="number">10</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ clang++ main.cpp -0 main</div><div class="line">$ nvim main.cpp</div><div class="line">:LLsession new</div><div class="line">:LLmode debug</div></pre></td></tr></table></figure>
+<p><img src="http://os3yasu4i.bkt.clouddn.com/vim-lldb.png" alt=""></p>
+<p>然而，费尽千辛万苦装完 lldb.nvim 后，发现居然不会用，即使有 <a href="https://www.youtube.com/watch?v=aXSNhTH1Co4" target="_blank" rel="external">YouToBe</a> 的教程也看不懂…，</p>
+<p>纯属一场瞎折腾，总结一下吧。</p>
+<p><strong>参考链接</strong></p>
+<p><a href="https://blog.rplasil.name/2016/03/how-to-debug-neovim-python-remote-plugin.html" target="_blank" rel="external">How to debug neovim python remote plugin</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vim/" rel="tag">#vim</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/2018-05-28-vim总结/" rel="next" title="vim 总结">
+                <i class="fa fa-chevron-left"></i> vim 总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/2018-05-30-vim-lldb瞎折腾/"
+           data-title="vim-lldb 瞎折腾" data-url="http://jumpingfrog0.com/2018/2018-05-30-vim-lldb瞎折腾/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/minion.jpeg"
+               alt="jumpingfrog0" />
+          <p class="site-author-name" itemprop="name">jumpingfrog0</p>
+          <p class="site-description motion-element" itemprop="description">Know a lot about a little, know a little about a lot</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jumpingfrog0" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/3290250165/profile?topnav=1&wvr=6&is_all=1" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/huang-dong-hong" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/704851a93179/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#vim-lldb-瞎折腾"><span class="nav-number">1.</span> <span class="nav-text">vim-lldb 瞎折腾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prerequisites"><span class="nav-number">1.0.1.</span> <span class="nav-text">Prerequisites</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装-lldb-nvim"><span class="nav-number">1.0.2.</span> <span class="nav-text">1. 安装 lldb.nvim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安装-neovim-的-python-库-Pynvim"><span class="nav-number">1.0.3.</span> <span class="nav-text">2. 安装 neovim 的 python 库 Pynvim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-解决-lldb-和-neovim-python-版本不一致的问题"><span class="nav-number">1.0.4.</span> <span class="nav-text">3. 解决 lldb 和 neovim python 版本不一致的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决方法"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jumpingfrog0</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.scheme !== 'Pisces' && (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always')) {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"jumpingfrog0"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+
+</body>
+</html>
