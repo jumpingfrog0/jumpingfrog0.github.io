@@ -136,7 +136,7 @@ nerdtree
 
 vim">
 <meta property="og:image" content="http://os3yasu4i.bkt.clouddn.com/vim-key.png">
-<meta property="og:updated_time" content="2018-05-28T17:02:51.000Z">
+<meta property="og:updated_time" content="2018-08-20T02:23:39.593Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vim 总结">
 <meta name="twitter:description" content="vim 总结:
@@ -438,8 +438,10 @@ vim">
 <!-- vim-markdown-toc -->
 <p>vim 辅助记忆神图：</p>
 <p><img src="http://os3yasu4i.bkt.clouddn.com/vim-key.png" alt="vim 辅助记忆神图"></p>
-<p>检查vim支持的功能</p>
-<pre><code>vim --version
+<p>进入Vim自带的教程里</p>
+<pre><code>$ vimtutor
+</code></pre><p>检查vim支持的功能</p>
+<pre><code>$ vim --version
 </code></pre><blockquote>
 <p>注意：Mac 自带的 Vim 不支持复制内容到剪切板</p>
 </blockquote>
@@ -483,6 +485,7 @@ vim">
 <li><code>dE</code> : 删除到本单词末尾包括标点在内</li>
 <li><code>db</code> : 删除到前一个单词</li>
 <li><code>dB</code> : 删除到前一个单词包括标点在内</li>
+<li><code>dG</code> : 删除到文本末尾</li>
 </ul>
 <h3 id="查找与替换"><a href="#查找与替换" class="headerlink" title="查找与替换"></a>查找与替换</h3><ul>
 <li><code>f + 字符</code> : 在当前行的光标之后查找字符</li>
@@ -493,10 +496,25 @@ vim">
 <li><code>n</code> : 查找下一处</li>
 <li><code>N</code> : 查找上一处</li>
 <li><code>r + c</code> : 将光标所在的字符替换成 c</li>
-<li><code>:%s/foo/bar/g</code>: 全文替换 foo 为 bar</li>
+<li><code>:s/foo/bar</code> : 光标所在行的第一个 foo 替换为 bar</li>
+<li><code>:1,50s/foo/bar/</code> : 在第1行和第50行之间（含）进行搜索和替换</li>
+<li><code>:45s/foo/bar/</code> : 仅仅在第45行进行搜索和替换</li>
+<li><code>:%s/foo/bar/g</code> : 全文查找 foo 并替换为 bar</li>
+<li><p><code>:%s/foo/bar/gc</code> : 全文查找 foo 并替换为 bar，替换时询问</p>
+<p>  <code>y/n/a/q/l/^E/^Y</code> : </p>
+<ul>
+<li>y表示同意当前替换；</li>
+<li>n表示不同意当前替换；</li>
+<li>a表示替换当前和后面的并且不再确认；</li>
+<li>q表示立即结束替换操作；</li>
+<li>l表示把当前的替换后结束替换操作；</li>
+<li>^E向上滚屏，用来帮助查看前后内容以决定进行操作；</li>
+<li>^Y向下滚屏，用来帮助查看前后内容以决定进行操作。</li>
+</ul>
+</li>
 </ul>
 <h3 id="多行查找替换"><a href="#多行查找替换" class="headerlink" title="多行查找替换"></a>多行查找替换</h3><p>将 foo 替换成 bar</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Shift + V</div><div class="line">// 方向键选中需要查找替换的内容，输入：,vim会自动补全 :&apos;&lt;,&apos;&gt;</div><div class="line">:&apos;&lt;,&apos;&gt;s/foo/bar/g</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Shift + V</div><div class="line">// 方向键选中需要查找替换的内容，输入：,vim会自动补全 :&apos;&lt;,&apos;</div><div class="line">:&apos;&lt;,&apos;&gt;s/foo/bar/g&gt;</div></pre></td></tr></table></figure>
 <h3 id="选中"><a href="#选中" class="headerlink" title="选中"></a>选中</h3><ul>
 <li><code>v + i + w</code> : 选中当前光标所在的单词 （iw: inner word)</li>
 <li><code>v + b</code> : 选中当前光标到当前单词的开头</li>
@@ -527,6 +545,7 @@ G  光标移到最后一行
 <li><code>u</code> : 撤销</li>
 <li><code>U</code> : 行内撤销</li>
 <li><code>Ctrl + r</code> : 取消撤销</li>
+<li><code>:!ls</code> : 等同于在 Shell 终端执行 <em>ls</em> 命令。</li>
 </ul>
 <h3 id="自定义快捷键"><a href="#自定义快捷键" class="headerlink" title="自定义快捷键"></a>自定义快捷键</h3><p>Vim 通过 <code>map</code> 自定义快捷键，<code>map</code> 是一个映射命令，将常用的很长的命令映射到一个新的功能键上。</p>
 <p>对于 <code>map</code> 而言，可能有这么几种前缀：</p>
