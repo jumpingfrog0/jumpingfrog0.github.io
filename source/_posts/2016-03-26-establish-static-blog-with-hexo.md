@@ -1,5 +1,10 @@
 ----
-title: 使用Hexo搭建静态博客
+layout: post
+title:  "使用Hexo搭建静态博客"
+date:   2016-03-26
+author: Jumpingfrog0 (黄东鸿）
+comments: true
+tags: blog
 ----
 
 ## 未完待续.....

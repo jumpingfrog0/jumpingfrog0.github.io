@@ -1,5 +1,10 @@
 ----
-title: iOS Status Bar 的隐藏
+layout: post
+title:  "iOS Status Bar 的隐藏"
+date:   2016-03-26
+author: Jumpingfrog0 (黄东鸿）
+comments: true
+tags: iOS
 ----
 
 自己一个人负责项目的好处是：代码想怎么写就怎么写，然而坏处是：代码要多渣有多渣，踩坑也是必须的

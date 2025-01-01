@@ -1,6 +1,11 @@
-----
-title: 自定义Xcode模板
-----
+---
+layout: post
+title:  "自定义Xcode模板"
+date:   2016-08-16
+author: Jumpingfrog0 (黄东鸿）
+comments: true
+tags: iOS
+---
 
 Xcode 拥有一个很好的内置模板，创建文件时会在头部生成一段注释，包含了文件名、创建者、创建时间、版权等信息，但有时候我们需要根据不同的需求自定义一套模板。
 
